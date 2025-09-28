@@ -33,7 +33,7 @@ const CustomTable = ({
             </div>}
             <div className="flex">
                 {/* Left Drawer (if provided) */}
-                {leftDrawer && <div className={`${openLeft ? 'w-60' : 'w-0'} overflow-hidden transition-width duration-300 relative`}>{leftDrawer}</div>}
+                {leftDrawer && <div className={`${openLeft ? 'w-60' : 'w-0 h-0'} overflow-hidden transition-width duration-300 relative`}>{leftDrawer}</div>}
 
                 <div className="flex-1 w-full overflow-auto">
                     {/* Pagination (if provided) */}
@@ -49,7 +49,7 @@ const CustomTable = ({
                 </div>
 
                 {/* Right Drawer (if provided) */}
-                {rightDrawer && <div className={`${openRight ? 'w-60' : 'w-0'} overflow-hidden transition-width duration-300`}>{rightDrawer}</div>}
+                {rightDrawer && <div className={`${openRight ? 'w-60' : 'w-0 h-0'} overflow-hidden transition-width duration-300`}>{rightDrawer}</div>}
             </div>
         </div>
     );

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import LoaderPage from '../Components/Loader/LoaderPage';
 import { Box, Tab, Tabs } from '@mui/material';
 import Issuance from '../pages/Issuance';
+import EXPRegister from '../pages/EXPRegister/EXPRegister';
 
 function a11yProps(index) {
     return {
@@ -194,7 +195,8 @@ const Root = () => {
                     />
                 </div>
                 <div className={`${value !== 1 ? 'hidden' : ''}`}>
-
+                    <EXPRegister 
+                    />
                 </div>
             </Box>
         </div>
