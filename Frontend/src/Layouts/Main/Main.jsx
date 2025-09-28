@@ -2,8 +2,8 @@ import { Outlet } from "react-router-dom";
 
 const Main = () => {
     return (
-        <div className="mx-auto">
-            <Outlet />
+        <div className="max-w-[1600px] mx-auto">
+            <Outlet></Outlet>
         </div>
     );
 };

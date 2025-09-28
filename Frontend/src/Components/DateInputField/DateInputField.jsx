@@ -36,7 +36,7 @@ const DateInputField = ({ value, setValue, formLength, formTitle, isCompulsory, 
                     InputProps={{
                         readOnly: true,
                     }}
-                    onInput={handleClick}
+                    onClick={handleClick}
                     // onClick={() => document.getElementById('date-input').focus()}
                     sx={{
                         width: "160px",

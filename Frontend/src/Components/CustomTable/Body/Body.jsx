@@ -11,7 +11,6 @@ import { TableHeadStyle3 } from "../../../lib";
 const Body = ({
     headers,
     bodyData,
-    footer,
     isSelectOption,
     handleSelectRow,
     handleSelectAllRow,
@@ -23,6 +22,7 @@ const Body = ({
             component={Paper}
             sx={{
                 position: "relative",
+                scrollbarWidth: 'thin',
             }}
         >
             <Table
@@ -30,7 +30,7 @@ const Body = ({
                 size="small"
                 sx={{
                     border: 1,
-                    borderBottom: 0
+                    borderBottom: 0,
                 }}
             >
                 <TableHead>
@@ -83,7 +83,6 @@ const Body = ({
                             <TableRow
                                 key={index}
                                 sx={{
-                                    bgcolor: row?.['Success'] === 'Failed' ? 'red' : 'white',
                                     borderBottom: '2px solid blue'
                                 }}
                             >
@@ -96,6 +95,7 @@ const Body = ({
                                             position: "sticky",
                                             right: 0,
                                             borderLeft: 0,
+                                            bgcolor: row?.isError ? 'red' : 'white',
                                             borderBottom: '1px solid black'
                                         }}
                                     >
@@ -106,7 +106,8 @@ const Body = ({
                                             checked={isChecked(row)}
                                         />
                                     </TableCell>}
-                                {headers &&
+                                {
+                                    headers &&
                                     headers.map((head, indx) => (
                                         <TableCell
                                             key={indx}
@@ -120,34 +121,7 @@ const Body = ({
                                                 fontSize: 14,
                                                 borderLeft: indx === 0 ? (isSelectOption ? 1 : 0) : 1,
                                                 // borderColor: 'black'
-                                                borderBottom: '1px solid black'
-                                            }}
-                                        >
-                                            {head == 'SL No' ? row?.[head] < 10 ? `00${row?.[head]}` : row?.[head] < 100 ? `0${row?.[head]}` : row?.[head] : row?.[head]}
-                                        </TableCell>))}
-                            </TableRow>
-                        ))}
-                    {footer &&
-                        Array.isArray(footer) &&
-                        footer?.map((row, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{ borderBottom: '2px solid blue' }}
-                            >
-                                {
-                                    headers &&
-                                    headers.map((head, indx) => (
-                                        <TableCell
-                                            key={indx}
-                                            scope="row"
-                                            align="center"
-                                            sx={{
-                                                whiteSpace: "nowrap",
-                                                py: '1px',
-                                                px: .5,
-                                                fontSize: 14,
-                                                fontWeight: 'bold',
-                                                borderLeft: indx === 0 ? (isSelectOption ? 1 : 0) : 1,
+                                                bgcolor: row?.isError ? 'red' : 'white',
                                                 borderBottom: '1px solid black'
                                             }}
                                         >
@@ -157,7 +131,6 @@ const Body = ({
                             </TableRow>
                         ))
                     }
-                    {/* </TableRow> */}
                 </TableBody>
             </Table>
         </TableContainer>

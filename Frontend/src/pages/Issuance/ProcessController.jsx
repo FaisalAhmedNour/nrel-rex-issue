@@ -1,4 +1,3 @@
-import { LoadingButton } from "@mui/lab";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
@@ -66,11 +65,18 @@ const ProcessController = ({
             <Box sx={style}>
                 <div className="relative z-20 px-1">
                     {/* <h3 className="font-semibold text-lg">Response Data</h3> */}
-                    <span className="absolute -top-4 -right-4">
-                        <IconButton size="small" color="error">
+                        <IconButton 
+                        size="small" 
+                        color="error"
+                        sx={{
+                            position: 'absolute',
+                            top: -16,
+                            right: -16,
+                            p: 0
+                        }}
+                        >
                             <CloseIcon onClick={handleClose} />
                         </IconButton>
-                    </span>
                     <form
                         onSubmit={handleStart}
                         className="flex flex-col items-center gap-2 justify-center bg-white p-4 pb-0"
@@ -494,11 +500,12 @@ const ProcessController = ({
                                 size="small"
                                 sx={{
                                     height: 25,
+                                    textTransform: 'capitalize',
                                 }}
                                 color="success"
                                 type="submit"
                                 variant="outlined"
-                            >Start</Button>
+                            >Start Issuing</Button>
                         </div>
                     </form>
                 </div>

@@ -1,3 +1,5 @@
+// Faisal (C)
+
 import React, { useEffect, useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import Paper from '@mui/material/Paper';
@@ -12,18 +14,38 @@ import TimerSection from '../../Components/TimerSection';
 import MessageTable from '../../Components/MessageTable';
 import PulledDataFromEngine from './PulledDataFromEngine';
 import { headerKeys, headers } from './lib';
+import SettingsIcon from '@mui/icons-material/Settings';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Parties from './Country-Buyer';
+import FormatDownload from '../../Components/FormatDownload';
 
-const Issuance = () => {
-    // timer
-    const [isExpandStatus, setIsExpandStatus] = useState(false);
-    const [isExpandTimer, setIsExpandTimer] = useState(false);
-    const [isExpandMiniTimer, setIsExpandMiniTimer] = useState(false);
-    const [isExpandMessage, setIsExpandMessage] = useState(false);
-    const [seconds, setSeconds] = useState(0);
-    const [succeed, setSucceed] = useState(0);
-    // loader
-    const [isLoading, setIsLoading] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
+const Issuance = ({
+    isExpandStatusForExternal,
+    setIsExpandStatusForExternal,
+    isExpandTimerForExternal,
+    setIsExpandTimerForExternal,
+    isExpandMiniTimerForExternal,
+    setIsExpandMiniTimerForExternal,
+    isExpandMessageForExternal,
+    setIsExpandMessageForExternal,
+    secondsForExternal,
+    setSecondsForExternal,
+    succeedForExternal,
+    setSucceedForExternal,
+    isLoading,
+    setIsLoading,
+    isProcessing,
+    setIsProcessing,
+    pageOfPulledFromEngine,
+    setPageOfPulledFromEngine,
+    rowsPerPageOfPulledFromEngine,
+    setRowsPerPageOfPulledFromEngine,
+    tableBodyDataOfPulledFromEngine,
+    setTableBodyDataOfPulledFromEngine,
+}) => {
+
     const [isStartVisible, setIsStartVisible] = useState(false);
     const [engineError, setEngineError] = useState(false);
     const [excelPath, setExcelPath] = useState('');
@@ -32,10 +54,7 @@ const Issuance = () => {
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
     const handleOpen = () => setOpen(true);
-    // table
-    const [pageOfPulledFromEngine, setPageOfPulledFromEngine] = useState(0);
-    const [rowsPerPageOfPulledFromEngine, setRowsPerPageOfPulledFromEngine] = useState(10);
-    const [tableBodyDataOfPulledFromEngine, setTableBodyDataOfPulledFromEngine] = useState([]);
+    
     // formData
     const [formState, setFormState] = useState({
         createNewSoO: false,
@@ -49,19 +68,31 @@ const Issuance = () => {
         username: '',
         password: ''
     });
+    // Library list
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open2 = Boolean(anchorEl);
+    const handleClickOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClickClose = () => {
+        setAnchorEl(null);
+    };
+    const [pageToShow, setPageToShow] = useState('main');
+
 
     const getEngineOnSignal = () => {
         window?.engine?.onProcessStart(function (message) {
-            setIsExpandMiniTimer(true);
+            setIsExpandMiniTimerForExternal(true);
         });
     };
 
     const getEngineOffSignal = () => {
         window?.engine?.onProcessStop(function (message) {
-            setIsExpandMiniTimer(false);
+            setIsExpandMiniTimerForExternal(false);
         });
     };
 
+    // TODO: FIXME
     const handleDownloadFormat = () => {
         const randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
         const link = document.createElement('a');
@@ -165,12 +196,56 @@ const Issuance = () => {
 
     return (
         <div className="overflow-hidden">
-            <LoaderPage open={isLoading} />
             <div className="absolute flex justify-between w-full px-2">
                 <div className="flex items-center gap-2 mt-1">
                     <StickyInstructions
                         title={"Rex Issuance"}
                     />
+                    <Tooltip title={"Library"} arrow placement="right" disableInteractive>
+                        <Paper
+                            sx={{
+                                overflow: "hidden",
+                                py: 1,
+                                px: 1,
+                                width: 40,
+                                height: 40
+                            }}
+                            className="space-y-1"
+                            onClick={handleClickOpen}
+                        >
+                            <SettingsIcon
+                                sx={{
+                                    color: "gray",
+                                    cursor: "pointer",
+                                }}
+                            />
+                        </Paper>
+                    </Tooltip>
+                    <Menu
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        anchorEl={anchorEl}
+                        open={open2}
+                        onClose={handleClickClose}
+                    >
+                        <MenuList dense sx={{ outline: 'none' }}>
+                            <MenuItem
+                                sx={{ display: 'flex', gap: 1, height: 25, fontSize: 14, borderColor: '#f5f5f5', borderTop: '1px solid #e5e5e5', borderBottom: '1px solid #e5e5e5' }}
+                                onClick={() => {
+                                    setPageToShow('county-buyer');
+                                    handleClickClose();
+                                }}
+                            >
+                                CountryName-Buyer(REX)
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
                     <Tooltip title={"Timer Details"} arrow placement="right" disableInteractive>
                         <Paper
                             sx={{
@@ -183,30 +258,31 @@ const Issuance = () => {
                                 px: 1
                             }}
                         >
-                            {isExpandTimer ?
+                            {isExpandTimerForExternal ?
                                 <ClearIcon
                                     sx={{
                                         color: "red",
                                         cursor: "pointer",
                                         fontSize: 20
                                     }}
-                                    onClick={() => setIsExpandTimer(false)}
+                                    onClick={() => setIsExpandTimerForExternal(false)}
                                 /> :
-                                <div className="flex items-center justify-between gap-1" onClick={() => setIsExpandTimer(true)}>
+                                <div className="flex items-center justify-between gap-1" onClick={() => setIsExpandTimerForExternal(true)}>
                                     <TimerOutlinedIcon
                                         sx={{
-                                            color: "#212121",
+                                            color: "#707070",
+                                            // color: "#212121",
                                             cursor: "pointer"
                                         }}
                                     // onClick={() => setIsExpandTimer(true)}
                                     />
-                                    {isExpandMiniTimer && <div className="flex flex-col items-center cursor-pointer">
+                                    {isExpandMiniTimerForExternal && <div className="flex flex-col items-center cursor-pointer">
                                         <p className="font-bold tracking-wide font-roboto text-sm text-[#1976d2]"><span className="flex">
-                                            {String(Math.floor(seconds / 3600)).padStart(2, "0")} :{" "}
-                                            {String(Math.floor((seconds % 3600) / 60)).padStart(2, "0")} :{" "}
-                                            {String(seconds % 60).padStart(2, "0")}
+                                            {String(Math.floor(secondsForExternal / 3600)).padStart(2, "0")} :{" "}
+                                            {String(Math.floor((secondsForExternal % 3600) / 60)).padStart(2, "0")} :{" "}
+                                            {String(secondsForExternal % 60).padStart(2, "0")}
                                         </span></p>
-                                        <p className="font-bold tracking-wide font-roboto text-sm">Pulled: {succeed}</p>
+                                        <p className="font-bold tracking-wide font-roboto text-sm">Pulled: {succeedForExternal}</p>
                                     </div>}
                                 </div>}
                         </Paper>
@@ -223,44 +299,25 @@ const Issuance = () => {
                                 justifyContent: 'center'
                             }}
                         >
-                            {isExpandMessage ?
+                            {isExpandMessageForExternal ?
                                 <ClearIcon
                                     sx={{
                                         color: "gray",
                                         cursor: "pointer",
                                         fontSize: 20
                                     }}
-                                    onClick={() => setIsExpandMessage(false)}
+                                    onClick={() => setIsExpandMessageForExternal(false)}
                                 /> :
                                 <EmailOutlinedIcon
                                     sx={{
                                         color: "gray",
                                         cursor: "pointer"
                                     }}
-                                    onClick={() => setIsExpandMessage(true)}
+                                    onClick={() => setIsExpandMessageForExternal(true)}
                                 />}
                         </Paper>
                     </Tooltip>
-                    <Tooltip title={"Download Format"} arrow placement="left" disableInteractive>
-                        <Paper
-                            sx={{
-                                width: 40,
-                                height: 40,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
-                        >
-                            <SimCardDownloadOutlinedIcon
-                                sx={{
-                                    color: "gray",
-                                    cursor: "pointer",
-                                    fontSize: 25
-                                }}
-                                onClick={handleDownloadFormat}
-                            />
-                        </Paper>
-                    </Tooltip>
+                    <FormatDownload />
                 </div>
             </div>
             <ProcessController
@@ -275,43 +332,48 @@ const Issuance = () => {
                 setFormState={setFormState}
             />
             <div
-                className="flex gap-2 w-full overflow-hidden pt-12 px-2"
+                className={`flex ${ isExpandTimerForExternal && isExpandMessageForExternal ? "gap-2" : "gap-0"} w-full overflow-hidden pt-12 px-2`}
                 style={{
-                    height: (isExpandTimer || isExpandMessage) ? 230 : 0,
+                    height: (isExpandTimerForExternal || isExpandMessageForExternal) ? 230 : 0,
                     transition: "height 1s",
                 }}
             >
                 <TimerSection
-                    isDataToRun={false}
+                    isDataToRun={true}
                     dataToRunText={'Rex to Issue'}
                     isSuccess={true}
                     successText={"Issued"}
                     isFaild={true}
-                    isExpand={isExpandTimer}
-                    setIsExpand={setIsExpandTimer}
-                    setSucceed={setSucceed}
-                    seconds={seconds}
-                    setSeconds={setSeconds}
+                    isExpand={isExpandTimerForExternal}
+                    setIsExpand={setIsExpandTimerForExternal}
+                    setSucceed={setSucceedForExternal}
+                    seconds={secondsForExternal}
+                    setSeconds={setSecondsForExternal}
                 />
                 <MessageTable
-                    isExpandMessage={isExpandMessage}
-                    setIsExpandMessage={setIsExpandMessage}
-                    isExpandStatus={isExpandStatus}
-                    setIsExpandStatus={setIsExpandStatus}
+                    isExpandMessage={isExpandMessageForExternal}
+                    setIsExpandMessage={setIsExpandMessageForExternal}
+                    isExpandStatus={isExpandStatusForExternal}
+                    setIsExpandStatus={setIsExpandStatusForExternal}
                 />
             </div>
-            <PulledDataFromEngine
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                isProcessing={isProcessing}
-                pageOfPulledFromEngine={pageOfPulledFromEngine}
-                setPageOfPulledFromEngine={setPageOfPulledFromEngine}
-                rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
-                setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
-                tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
-                handleOpen={handleOpen}
-                handleStop={handleStop}
-            />
+            {pageToShow === 'main' ?
+                <PulledDataFromEngine
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    isProcessing={isProcessing}
+                    pageOfPulledFromEngine={pageOfPulledFromEngine}
+                    setPageOfPulledFromEngine={setPageOfPulledFromEngine}
+                    rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
+                    setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
+                    tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
+                    setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
+                    handleOpen={handleOpen}
+                    handleStop={handleStop}
+                /> :
+                <Parties
+                    setPageToShow={setPageToShow}
+                />}
         </div>
     );
 };

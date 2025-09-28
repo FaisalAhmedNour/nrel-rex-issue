@@ -153,7 +153,7 @@ const TimerSection = ({
             onClick={() => setIsExpand(false)}
           />
         )}
-        {isExpand || (
+        {/* {isExpand || (
           <LaunchIcon
             sx={{
               color: "gray",
@@ -162,7 +162,7 @@ const TimerSection = ({
             }}
             onClick={() => setIsExpand(true)}
           />
-        )}
+        )} */}
         {isExpand && isDataToRun && (
           <Typography
             sx={{

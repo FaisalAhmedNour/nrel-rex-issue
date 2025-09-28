@@ -1,17 +1,17 @@
-//  Faisal (C) 9 July 2025
+//  Faisal (C) 25 April 2025
 
 import { createMemoryRouter } from "react-router-dom";
 import Main from "../Layouts/Main/Main";
-import Issuance from "../pages/Issuance";
+import Root from "../Root/Root";
 
 export const router = createMemoryRouter([
     {
         path: "/",
-        element:<Main />,
+        element: <Main />,
         children: [
             {
                 path: "/",
-                element: <Issuance />
+                element: <Root />
             },
         ]
     }

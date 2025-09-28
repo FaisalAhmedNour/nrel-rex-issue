@@ -48,7 +48,7 @@ const Pagination = ({
                     }
                     {needPagination &&
                         <div className="flex items-center gap-2">
-                            <span className="font-mono ms-5"><span className="cursor-pointer" onClick={handleClick}>{totalRows > 0 ? page * rowsPerPage + 1 : 0}-{Math.min(page * rowsPerPage + rowsPerPage, totalRows)}</span> of {totalRows}</span>
+                            <span className="font-mono ms-5"><span className="cursor-pointer" onClick={handleClick}>{page * rowsPerPage}-{Math.min(page * rowsPerPage + rowsPerPage, totalRows)}</span> of {totalRows}</span>
                             <IconButton
                                 size="small"
                                 sx={{ p: 0 }}
@@ -68,7 +68,9 @@ const Pagination = ({
                         </div>}
                 </div>
             </div>
-            <div className={`bg-blue-400 absolute ${isSelected ? 'top-0' : 'top-[100%]'} left-0 right-0 h-full`}></div>
+            <div className={`bg-blue-400 absolute ${isSelected ? 'top-0' : 'top-[100%]'} left-0 right-0 h-full`}>
+
+            </div>
             {rowsPerPageOptions && <Menu
                 anchorOrigin={{
                     vertical: 'bottom',
