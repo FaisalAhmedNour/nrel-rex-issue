@@ -30,13 +30,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Pagination from '../../Components/CustomTable/Pagination/Pagination';
-import { IconButton, Tooltip } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import { TableHeadStyle3 } from '../../lib';
 
-const CountryBuyer = ({ setPageToShow }) => {
+const LibraryForUser = ({ library, setPageToShow }) => {
+    useEffect(() => {
+        console.log('library', library);
+    }, [library]);
     // form data
     const [formData, setFormData] = useState({});
-    const [action, setAction] = useState('add');
+    // const [action, setAction] = useState('add');
     const [dataToUpdate, setDataToUpdate] = useState(undefined);
     // togol
     const [isDownloading, setIsDownloading] = useState(false);
@@ -57,9 +61,9 @@ const CountryBuyer = ({ setPageToShow }) => {
     // menu for settings
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    // };
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -69,26 +73,8 @@ const CountryBuyer = ({ setPageToShow }) => {
     const handleChangePage = (p) => { setPage(p) };
     const handleChangeRowsPerPage = (r) => { setRowsPerPage(r) };
 
-    const [updates, setUpdates] = useState({ add: [], upd: [], del: [] });
-
     // modal for adding new item
     const [openModal, setOpenModal] = useState(false);
-    const [newItem, setNewItem] = useState({});
-
-    const handleOpenModal = () => {
-        setOpenModal(true);
-    };
-
-    const handleOpenFormToAddNewRecord = () => {
-        setAction('add');
-        handleOpenModal();
-    }
-
-    const handleOpenFormForUpdate = (data) => {
-        setAction('upd');
-        setDataToUpdate(data);
-        handleOpenModal();
-    }
 
     useEffect(() => {
         if (dataToUpdate !== undefined) {
@@ -191,7 +177,7 @@ const CountryBuyer = ({ setPageToShow }) => {
     const getInfo = async (flag = '0') => {
         try {
             flag === "1" ? setGettingData(true) : setIsLoading(true);
-            const result = await window.engine.Proxy(`/lib/getRecords?Name=CountryName-Buyer(REX)`, 'get');
+            const result = await window.engine.Proxy(`/lib/getRecords?Name=${library?.Name}`, 'get');
             console.log('get data', result);
             if (result?.status === 200 && result?.data?.success === true) {
                 setAPIError(null);
@@ -256,24 +242,14 @@ const CountryBuyer = ({ setPageToShow }) => {
 
     useEffect(() => {
         getUpdatedBankDetailsInfo('1');
-    }, [reload]);
+    }, [reload, library]);
 
     const handleExport = () => {
         exportToExcel(tableData, headers.map(header => header?.displayName), 'Country Buyer Details For Rex', setIsDownloading, true);
     }
 
-    const rowToEdit = (row) => {
-        // console.log("row", row);
-        const data = tableData?.[row];
-        handleOpenFormForUpdate(data);
-    }
-
-    // console.log('updates', updates);
-
     const handleAddItem = () => {
         setToEdit(tableData?.length);
-        // setUpdates(prev => ({ ...prev, add: [...prev.add, tableData?.length] }));
-        // console.log("fullTableData", tableData)
         const tempData = [...tableData, { action: 'add' }];
         setTableData(tempData);
     }
@@ -335,53 +311,8 @@ const CountryBuyer = ({ setPageToShow }) => {
         }
     };
 
-    // FIXME
     const handleSave = async () => {
         handleSaveOrUpdateRecord();
-        // // setToEdit(null);
-        // try {
-        //     if (errors.length > 0) {
-        //         Swal.fire({
-        //             title: "Error",
-        //             text: "Please fix all errors before saving.",
-        //             icon: "error",
-        //         });
-        //         return;
-        //     }
-        //     setIsLoading(true);
-        //     setIsSaveActive(false);
-        //     const data = {
-        //         Name: tableName,
-        //         // config: {
-        //         //     visToUser: visToUser,
-        //         //     hasDefault: hasDefault
-        //         // },
-        //         data: {
-        //             // headers: headers,
-        //             records: tableData
-        //         }
-        //     }
-        //     // const result = await saveLibraryRecords(data);
-        //     // if (result?.status >= 200 && result?.status < 400) {
-        //     //     // setTableData(result?.data);
-        //     // } else {
-        //     //     Swal.fire({
-        //     //         title: "Error",
-        //     //         text: result?.data?.message || "Failed to save Library data.",
-        //     //         icon: "error",
-        //     //     });
-        //     // }
-        //     // console.log('Records', result);
-        // } catch (error) {
-        //     console.error(error);
-        //     Swal.fire({
-        //         title: "Error",
-        //         text: "Failed to save Library data.",
-        //         icon: "error",
-        //     });
-        // } finally {
-        //     setIsLoading(false);
-        // }
     }
 
     return (
@@ -391,7 +322,7 @@ const CountryBuyer = ({ setPageToShow }) => {
                 <p className='text-center text-red-600 bg-red-300 py-3'>{APIError}</p> :
                 <CustomTable
                     className={"mt-0"}
-                    headerTitle={"CountryName-Buyer(REX)"}
+                    headerTitle={library?.Value?.displayName || library?.Name}
                     headerButtons={[
                         <Button
                             variant="outlined"
@@ -623,7 +554,7 @@ const CountryBuyer = ({ setPageToShow }) => {
                                                     zIndex: 100,
                                                 }}
                                             >
-                                                Sl No
+                                                Name
                                             </TableCell>}
                                         {headers && headers?.length > 0 && headers.map((header, index) => (
                                             <TableCell
@@ -918,7 +849,7 @@ const CountryBuyer = ({ setPageToShow }) => {
                                     </TableRow> */}
                                 </TableHead>
                                 <TableBody>
-                                    {console.log("tableData", tableData, originalTableData) || tableData &&
+                                    {tableData &&
                                         Array.isArray(tableData) &&
                                         tableData
                                             .filter(row => row.action !== 'del')
@@ -1070,7 +1001,7 @@ const CountryBuyer = ({ setPageToShow }) => {
                         headers &&
                         headers?.slice(1)?.map((header, index) => (
                             <MenuItem
-                                key={header.id}
+                                key={header?.id || index}
                                 sx={{ display: 'flex', gap: 1 }}
                             >
                                 <Checkbox
@@ -1119,4 +1050,4 @@ const CountryBuyer = ({ setPageToShow }) => {
     );
 };
 
-export default CountryBuyer;   
+export default LibraryForUser;   

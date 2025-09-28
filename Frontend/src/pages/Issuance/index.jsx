@@ -18,8 +18,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import Parties from './Country-Buyer';
 import FormatDownload from '../../Components/FormatDownload';
+import LibraryForUser from './libraryForUser';
+import Swal from 'sweetalert2';
 
 const Issuance = ({
     isExpandStatusForExternal,
@@ -50,11 +51,13 @@ const Issuance = ({
     const [engineError, setEngineError] = useState(false);
     const [excelPath, setExcelPath] = useState('');
     const [folderPath, setFolderPath] = useState('');
+    const [libraries, setLibraries] = useState([]);
+    const [library, setLibrary] = useState({});
     // modal
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
     const handleOpen = () => setOpen(true);
-    
+
     // formData
     const [formState, setFormState] = useState({
         createNewSoO: false,
@@ -91,17 +94,6 @@ const Issuance = ({
             setIsExpandMiniTimerForExternal(false);
         });
     };
-
-    // TODO: FIXME
-    const handleDownloadFormat = () => {
-        const randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
-        const link = document.createElement('a');
-        link.href = "REX ISSUANCE FORMAT V.0.1.3 DT 09.05.2025.xlsx";
-        link.download = `REX ISSUANCE FORMAT V.0.1.3 DT 09.05.2025 ${randomFourDigitNumber}.xlsx`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
 
     // trigger engine start
     const startEngine = async (data) => {
@@ -158,14 +150,47 @@ const Issuance = ({
         }
     };
 
+    const getInfo = async () => {
+        try {
+            // flag === "1" ? setGettingData(true) : setIsLoading(true);
+            setIsLoading(true);
+            const result = await window.engine.Proxy(`/lib/getList`, 'get');
+            // console.log('get data', result);
+            if (result?.status === 200 && result?.data?.success === true) {
+                // setAPIError(null);
+                // return result?.data;
+                // console.log('result?.data', result?.data);
+                setLibraries(result?.data?.list || []);
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: result?.data?.message || "Failed to fetch library data!"
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: error?.message || "Failed to fetch library data!"
+            })
+        } finally {
+            // flag === "1" ? setGettingData(false) : setIsLoading(false);
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
+        getInfo();
         getEngineOnSignal();
         getEngineOffSignal();
 
         let isMounted = true;
 
         const handleTableData = (dt) => {
-            console.log('row', dt);
+            // console.log('row', dt);
             if (!isMounted) return;
 
             if (typeof window.__slno_counter === "undefined" || window.__slno_counter === null) {
@@ -235,15 +260,31 @@ const Issuance = ({
                         onClose={handleClickClose}
                     >
                         <MenuList dense sx={{ outline: 'none' }}>
-                            <MenuItem
-                                sx={{ display: 'flex', gap: 1, height: 25, fontSize: 14, borderColor: '#f5f5f5', borderTop: '1px solid #e5e5e5', borderBottom: '1px solid #e5e5e5' }}
-                                onClick={() => {
-                                    setPageToShow('county-buyer');
-                                    handleClickClose();
-                                }}
-                            >
-                                CountryName-Buyer(REX)
-                            </MenuItem>
+                            {console.log("libraries", libraries) ||
+                            libraries &&
+                                libraries?.length > 0 &&
+                                libraries.map((libraryData, index) => (
+                                    <MenuItem
+                                        key={libraryData?._id || index}
+                                        sx={{
+                                            display: 'flex',
+                                            gap: 1,
+                                            maxHeight: 20,
+                                            height: 25,
+                                            fontSize: 14,
+                                            // borderColor: '#f5f5f5',
+                                            borderTop: '1px solid #e5e5e5',
+                                            borderBottom: '1px solid #e5e5e5'
+                                        }}
+                                        onClick={() => {
+                                            setPageToShow('library');
+                                            setLibrary(libraryData);
+                                            handleClickClose();
+                                        }}
+                                    >
+                                        {libraryData?.Value?.displayName ? libraryData?.Value?.displayName : libraryData?.Name}
+                                    </MenuItem>
+                                ))}
                         </MenuList>
                     </Menu>
                     <Tooltip title={"Timer Details"} arrow placement="right" disableInteractive>
@@ -332,7 +373,7 @@ const Issuance = ({
                 setFormState={setFormState}
             />
             <div
-                className={`flex ${ isExpandTimerForExternal && isExpandMessageForExternal ? "gap-2" : "gap-0"} w-full overflow-hidden pt-12 px-2`}
+                className={`flex ${isExpandTimerForExternal && isExpandMessageForExternal ? "gap-2" : "gap-0"} w-full overflow-hidden pt-12 px-2`}
                 style={{
                     height: (isExpandTimerForExternal || isExpandMessageForExternal) ? 230 : 0,
                     transition: "height 1s",
@@ -371,8 +412,9 @@ const Issuance = ({
                     handleOpen={handleOpen}
                     handleStop={handleStop}
                 /> :
-                <Parties
+                <LibraryForUser
                     setPageToShow={setPageToShow}
+                    library={library}
                 />}
         </div>
     );
