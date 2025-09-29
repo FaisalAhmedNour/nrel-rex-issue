@@ -245,7 +245,17 @@ const LibraryForUser = ({ library, setPageToShow }) => {
     }, [reload, library]);
 
     const handleExport = () => {
-        exportToExcel(tableData, headers.map(header => header?.displayName), 'Country Buyer Details For Rex', setIsDownloading, true);
+        const headersToExport = headers.map(header => header?.displayName ? header?.displayName : header?.hName);
+        const tableDataToExport = tableData.map(row => {
+            const rowData = {};
+            headers.forEach(header => {
+                const key = header?.displayName ? header?.displayName : header?.hName;
+                rowData[key] = row[header?.hName] !== undefined ? row[header?.hName] : '';
+            })
+            return rowData;
+        })
+        console.log('Exporting', tableDataToExport, headersToExport);
+        exportToExcel(tableDataToExport, headersToExport, 'Country Buyer Details For Rex', setIsDownloading, true);
     }
 
     const handleAddItem = () => {
