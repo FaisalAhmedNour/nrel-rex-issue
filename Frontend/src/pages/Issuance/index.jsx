@@ -118,6 +118,7 @@ const Issuance = ({
         const data = {
             action: formState.action,
             src: formState.action === "verify" ? formState.src : undefined,
+            dir: formState.action === "verify" ? formState.src : undefined,
             withPrefix: formState.action === "verify" ? undefined : formState.withPrefix,
             userName: formState.action === "verify" ? undefined : formState.userName,
             password: formState.action === "verify" ? undefined : formState.password,

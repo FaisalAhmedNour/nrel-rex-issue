@@ -191,9 +191,9 @@ const ProcessController = ({
                                         }}
                                         component="label"
                                         variant="contained"
-                                        onClick={handleSetExcelFilePath}
+                                        onClick={() => handleSetFolderPath('src')}
                                     >
-                                        <UploadFileOutlinedIcon />
+                                        <DriveFolderUploadIcon />
                                     </Button>
                                 </div>
                             </div>}
