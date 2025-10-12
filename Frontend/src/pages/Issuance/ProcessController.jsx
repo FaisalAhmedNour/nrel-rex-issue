@@ -1,19 +1,17 @@
+// Faisal Ahmed (C)
+// Faisal Ahmed (M) - 13 Oct 2025
+
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
-import DateInputField from "../../Components/DateInputField/DateInputField";
 import FormTitle from "../../Components/FormTitle";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import FormControl from "@mui/material/FormControl";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
 import Typography from "@mui/material/Typography";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { useState } from "react";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -26,7 +24,7 @@ const style = {
     bgcolor: 'background.paper',
     border: '2px solid #1976d2',
     boxShadow: 24,
-    p: 3,
+    p: 2.5,
     borderRadius: 2
 };
 const inputLength = 180;
@@ -47,7 +45,7 @@ const ProcessController = ({
             accept: ["openFile"],
         });
         if (filePath?.success === true) {
-            setFormState({ ...formState, filePath: filePath?.path?.[0] });
+            setFormState({ ...formState, src: filePath?.path?.[0] });
         }
     };
 
@@ -60,13 +58,14 @@ const ProcessController = ({
             setFormState({ ...formState, [pathName]: filePath?.path?.[0] });
         }
     };
+
     return (
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
                 <div className="relative z-20 px-1">
                     {/* <h3 className="font-semibold text-lg">Response Data</h3> */}
-                        <IconButton 
-                        size="small" 
+                    <IconButton
+                        size="small"
                         color="error"
                         sx={{
                             position: 'absolute',
@@ -74,16 +73,16 @@ const ProcessController = ({
                             right: -16,
                             p: 0
                         }}
-                        >
-                            <CloseIcon onClick={handleClose} />
-                        </IconButton>
+                    >
+                        <CloseIcon onClick={handleClose} />
+                    </IconButton>
                     <form
                         onSubmit={handleStart}
-                        className="flex flex-col items-center gap-2 justify-center bg-white p-4 pb-0"
+                        className="flex flex-col items-center gap-1 justify-center bg-white p-2 pb-0"
                     >
-                        <div className="flex justify-start items-center gap-1">
+                        {/* <div className="flex justify-start items-center gap-1">
                             <FormTitle
-                                text={"Working Step"}
+                                text={"Action"}
                                 isCompulsory={true}
                                 length={inputLength}
                             />
@@ -91,8 +90,8 @@ const ProcessController = ({
                                 <FormControl fullWidth size="small">
                                     <Select
                                         className="editableSelect"
-                                        value={formState.withPrefix}
-                                        onChange={(e) => setFormState({ ...formState, withPrefix: e.target.value })}
+                                        value={formState.action}
+                                        onChange={(e) => setFormState({ ...formState, action: e.target.value })}
                                         displayEmpty
                                         size="small"
                                         sx={{
@@ -103,75 +102,202 @@ const ProcessController = ({
                                         }}
                                         inputProps={{ 'aria-label': 'Select Mode' }}
                                     >
-                                        <MenuItem sx={{ fontSize: 14, height: 25 }} value="validation">
-                                            <Typography sx={{ fontSize: 14 }}>Validation</Typography>
+                                        <MenuItem sx={{ fontSize: 14, height: 25 }} value="verify">
+                                            <Typography sx={{ fontSize: 14 }}>Verify</Typography>
                                         </MenuItem>
-                                        <MenuItem sx={{ fontSize: 14, height: 25 }} value="prefix">
-                                            <Typography sx={{ fontSize: 14 }}>With Prefix</Typography>
-                                        </MenuItem>
-                                        <MenuItem sx={{ fontSize: 14, height: 25 }} value="noPrefix">
-                                            <Typography sx={{ fontSize: 14 }}>Without Prefix</Typography>
-                                        </MenuItem>
-                                        <MenuItem sx={{ fontSize: 14, height: 25 }} value="finalize">
-                                            <Typography sx={{ fontSize: 14 }}>FINALIZE (REX)</Typography>
+                                        <MenuItem sx={{ fontSize: 14, height: 25 }} value="payslip">
+                                            <Typography sx={{ fontSize: 14 }}>Finalize</Typography>
                                         </MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
-                        </div>
-                        <div className="flex justify-start items-center gap-1">
-                            <FormTitle
-                                text={
-                                    formState.withPrefix === "validation"
-                                        ? "Excel source file location"
-                                        : "Excel Input File"
-                                }
-                                isCompulsory={true}
-                                length={inputLength}
-                            />
-                            <div className="w-[400px] mx-auto relative">
-                                <TextField
-                                    inputProps={{ readOnly: true }}
-                                    placeholder="Select folder"
-                                    size="small"
-                                    name="file_path"
-                                    variant="outlined"
-                                    value={formState.filePath}
-                                    sx={{
-                                        width: "100%",
-                                        bgcolor: "#e8f0fe",
-                                        "& .MuiInputBase-root": {
-                                            height: 25,
-                                            fontSize: 14,
-                                        },
-                                        overflow: "hidden",
-                                    }}
-                                />
-                                <Button
-                                    sx={{
-                                        position: "absolute",
-                                        right: "1px",
-                                        height: "92%",
-                                        width: "6px",
-                                        marginTop: "1px",
-                                        bgcolor: "white",
-                                        color: "#283e8a",
-                                        ":hover": {
-                                            color: "white",
-                                        },
-                                    }}
-                                    component="label"
-                                    variant="contained"
-                                    onClick={handleSetExcelFilePath}
-                                >
-                                    <UploadFileOutlinedIcon />
-                                </Button>
-                            </div>
-                        </div>
-                        {(formState.withPrefix === "prefix" || formState.withPrefix === "finalize") && (
+                        </div> */}
+                        {(formState.action === "payslip") &&
                             <div className="flex justify-start items-center gap-1">
                                 <FormTitle
-                                    text={"PDF Document Source"}
+                                    text={"Files are Save with prefix"}
+                                    isCompulsory={true}
+                                    length={inputLength}
+                                />
+                                <div className="w-[400px] mx-auto">
+                                    <FormControl fullWidth size="small">
+                                        <Select
+                                            className="editableSelect"
+                                            value={formState.withPrefix === true ? 'true' : 'false'}
+                                            onChange={(e) => setFormState({ ...formState, withPrefix: e.target.value === 'true' })}
+                                            displayEmpty
+                                            size="small"
+                                            sx={{
+                                                height: 25,
+                                                fontSize: 14,
+                                                overflow: "hidden",
+                                                bgcolor: "#e8f0fe",
+                                            }}
+                                            inputProps={{ 'aria-label': 'Select Mode' }}
+                                        >
+                                            <MenuItem sx={{ fontSize: 14, height: 25 }} value="true">
+                                                <Typography sx={{ fontSize: 14 }}>Yes</Typography>
+                                            </MenuItem>
+                                            <MenuItem sx={{ fontSize: 14, height: 25 }} value="false">
+                                                <Typography sx={{ fontSize: 14 }}>No</Typography>
+                                            </MenuItem>
+                                            {/* <MenuItem sx={{ fontSize: 14, height: 25 }} value="noPrefix">
+                                            <Typography sx={{ fontSize: 14 }}>Without Prefix</Typography>
+                                        </MenuItem>
+                                        <MenuItem sx={{ fontSize: 14, height: 25 }} value="finalize">
+                                            <Typography sx={{ fontSize: 14 }}>FINALIZE (REX)</Typography>
+                                        </MenuItem> */}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </div>}
+                        {(formState.action === "verify") &&
+                            <div className="flex justify-start items-center gap-1">
+                                <FormTitle
+                                    text={"Input File"}
+                                    isCompulsory={true}
+                                    length={inputLength}
+                                />
+                                <div className="w-[400px] mx-auto relative">
+                                    <TextField
+                                        inputProps={{ readOnly: true }}
+                                        placeholder="Select folder"
+                                        size="small"
+                                        name="src"
+                                        variant="outlined"
+                                        value={formState.src}
+                                        sx={{
+                                            width: "100%",
+                                            bgcolor: "#e8f0fe",
+                                            "& .MuiInputBase-root": {
+                                                height: 25,
+                                                fontSize: 14,
+                                            },
+                                            overflow: "hidden",
+                                        }}
+                                    />
+                                    <Button
+                                        sx={{
+                                            position: "absolute",
+                                            right: "1px",
+                                            height: "92%",
+                                            width: "6px",
+                                            marginTop: "1px",
+                                            bgcolor: "white",
+                                            color: "#283e8a",
+                                            ":hover": {
+                                                color: "white",
+                                            },
+                                        }}
+                                        component="label"
+                                        variant="contained"
+                                        onClick={handleSetExcelFilePath}
+                                    >
+                                        <UploadFileOutlinedIcon />
+                                    </Button>
+                                </div>
+                            </div>}
+                        {(formState.action === "payslip") && (
+                            <div className="flex justify-between gap-1">
+                                <FormTitle text={"User Name"} isCompulsory={true} length={inputLength} />
+                                <div className="w-[400px] mx-auto relative">
+                                    <TextField
+                                        fullWidth
+                                        sx={{
+                                            flexGrow: 1,
+                                            "& .MuiInputBase-root": {
+                                                height: 25,
+                                                fontSize: 14,
+                                            },
+                                        }}
+                                        size="small"
+                                        name="userName"
+                                        variant="outlined"
+                                        id="outlined-basic"
+                                        className="editableInput"
+                                        value={formState.userName}
+                                        onChange={(e) => setFormState({ ...formState, userName: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        {(formState.action === "payslip") && (
+                            <div className="flex justify-between gap-1">
+                                <FormTitle text={"Password"} isCompulsory={true} length={inputLength} />
+                                <div className="w-[400px] mx-auto relative">
+                                    <TextField
+                                        fullWidth
+                                        sx={{
+                                            flexGrow: 1,
+                                            "& .MuiInputBase-root": {
+                                                height: 25,
+                                                fontSize: 14,
+                                            },
+                                        }}
+                                        value={formState.password}
+                                        onChange={(e) => setFormState({ ...formState, password: e.target.value })}
+                                        type="password"
+                                        size="small"
+                                        name="password"
+                                        variant="outlined"
+                                        id="outlined-basic"
+                                        className="editableInput"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        {(formState.action === "payslip") && (
+                            <div className="flex justify-start items-center gap-1">
+                                <FormTitle
+                                    text={"Save PDF To"}
+                                    isCompulsory={true}
+                                    length={inputLength}
+                                />
+                                <div className="w-[400px] mx-auto relative">
+                                    <TextField
+                                        inputProps={{ readOnly: true }}
+                                        placeholder="Select folder"
+                                        size="small"
+                                        name="SoOSavePath"
+                                        variant="outlined"
+                                        value={formState.SoOSavePath}
+                                        sx={{
+                                            width: "100%",
+                                            bgcolor: "#e8f0fe",
+                                            "& .MuiInputBase-root": {
+                                                height: 25,
+                                                fontSize: 14,
+                                            },
+                                            overflow: "hidden",
+                                        }}
+                                        className="fixedInput"
+                                    />
+                                    <Button
+                                        sx={{
+                                            position: "absolute",
+                                            right: "1px",
+                                            height: "92%",
+                                            width: "6px",
+                                            marginTop: "1px",
+                                            bgcolor: "white",
+                                            color: "#283e8a",
+                                            ":hover": {
+                                                color: "white",
+                                            },
+                                        }}
+                                        component="label"
+                                        variant="contained"
+                                        onClick={() => handleSetFolderPath('SoOSavePath')}
+                                    >
+                                        <DriveFolderUploadIcon />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                        {(formState.action === "payslip") && (
+                            <div className="flex justify-start items-center gap-1">
+                                <FormTitle
+                                    text={"Uploading File Location"}
                                     isCompulsory={true}
                                     length={inputLength}
                                 />
@@ -216,8 +342,9 @@ const ProcessController = ({
                                 </div>
                             </div>
                         )}
+
                         {/* {console.log(createNewSoO, createNewSoO === true)} */}
-                        {(formState.withPrefix === "prefix" || formState.withPrefix === "noPrefix") && (
+                        {/* {(formState.withPrefix === "prefix" || formState.withPrefix === "noPrefix") && (
                             <div className="flex justify-start items-center gap-5">
                                 <FormTitle
                                     text={"Create New SoO"}
@@ -394,7 +521,6 @@ const ProcessController = ({
                         )}
                         {formState?.withPrefix === "noPrefix hidden" && (
                             <div className="flex justify-start items-center gap-1">
-                                {/* <p className="w-inputLength">: </p> */}
                                 <FormTitle
                                     text={"Bangladesh Bank EXP"}
                                     // isCompulsory={true}
@@ -441,60 +567,10 @@ const ProcessController = ({
                                     </Button>
                                 </div>
                             </div>
-                        )}
-                        {formState?.withPrefix === "validation" || (
-                            <div className="flex justify-between gap-2">
-                                {/* <p className="w-28 text-[14px]">Username: </p> */}
-                                <FormTitle text={"Username"} isCompulsory={true} length={inputLength} />
-                                <div className="w-[400px] mx-auto relative">
-                                    <TextField
-                                        fullWidth
-                                        sx={{
-                                            flexGrow: 1,
-                                            "& .MuiInputBase-root": {
-                                                height: 25,
-                                                fontSize: 14,
-                                            },
-                                        }}
-                                        size="small"
-                                        name="user_name"
-                                        variant="outlined"
-                                        id="outlined-basic"
-                                        className="editableInput"
-                                        value={formState.username}
-                                        onChange={(e) => setFormState({ ...formState, username: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-                        )}
-                        {formState?.withPrefix === "validation" || (
-                            <div className="flex justify-between gap-2">
-                                {/* <p className="w-28 text-[14px]">Password: </p> */}
-                                <FormTitle text={"Password"} isCompulsory={true} length={inputLength} />
-                                <div className="w-[400px] mx-auto relative">
-                                    <TextField
-                                        fullWidth
-                                        sx={{
-                                            flexGrow: 1,
-                                            "& .MuiInputBase-root": {
-                                                height: 25,
-                                                fontSize: 14,
-                                            },
-                                        }}
-                                        value={formState.password}
-                                        onChange={(e) => setFormState({ ...formState, password: e.target.value })}
-                                        type="password"
-                                        size="small"
-                                        name="password"
-                                        variant="outlined"
-                                        id="outlined-basic"
-                                        className="editableInput"
-                                    />
-                                </div>
-                            </div>
-                        )}
-                        {/* {typeof engineError === 'string' &&
-                            <p className="text-[red] text-xs text-center mt-1 col-span-2 order-11">{engineError}</p>} */}
+                        )} */}
+
+                        {typeof engineError === 'string' &&
+                            <p className="text-[red] text-xs text-center mt-1 col-span-2 order-11">{engineError}</p>}
                         <div className="flex items-center gap-2 mt-1">
                             <Button
                                 size="small"
@@ -505,7 +581,7 @@ const ProcessController = ({
                                 color="success"
                                 type="submit"
                                 variant="outlined"
-                            >Start Issuing</Button>
+                            >Start</Button>
                         </div>
                     </form>
                 </div>

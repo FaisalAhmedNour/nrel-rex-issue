@@ -1,10 +1,12 @@
-// Faisal (C) 7 April 2025
+// Faisal Ahmed (C) 7 April 2025
+// Faisal Ahmed (M) - 13 Oct 2025
 
 import { useEffect, useState } from 'react';
 import LoaderPage from '../Components/Loader/LoaderPage';
 import { Box, Tab, Tabs } from '@mui/material';
 import Issuance from '../pages/Issuance';
 import EXPRegister from '../pages/EXPRegister/EXPRegister';
+import LibraryForUser from '../pages/Issuance/libraryForUser';
 
 function a11yProps(index) {
     return {
@@ -14,6 +16,7 @@ function a11yProps(index) {
 }
 
 const Root = () => {
+    const [pageToShow, setPageToShow] = useState('main');
     // tab
     const [value, setValue] = useState(0);
     // engine
@@ -25,10 +28,13 @@ const Root = () => {
     // form data
     const [from, setFrom] = useState(null);
     const [to, setTo] = useState(null);
-    // loading
+    // Library
+    const [library, setLibrary] = useState(null);
     // loader
     const [isLoading, setIsLoading] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    // chanel
+    const [chanel, setChanel] = useState('ver');
     // error
     const [uploadError, setUploadError] = useState(null);
     const [engineError, setEngineError] = useState(null);
@@ -168,36 +174,49 @@ const Root = () => {
                         />
                     </Tabs>
                 </Box>
-                <div className={`${value !== 0 ? 'hidden' : ''}`}>
-                    <Issuance
-                        isExpandStatusForExternal={isExpandStatusForExternal}
-                        setIsExpandStatusForExternal={setIsExpandStatusForExternal}
-                        isExpandTimerForExternal={isExpandTimerForExternal}
-                        setIsExpandTimerForExternal={setIsExpandTimerForExternal}
-                        isExpandMiniTimerForExternal={isExpandMiniTimerForExternal}
-                        setIsExpandMiniTimerForExternal={setIsExpandMiniTimerForExternal}
-                        isExpandMessageForExternal={isExpandMessageForExternal}
-                        setIsExpandMessageForExternal={setIsExpandMessageForExternal}
-                        secondsForExternal={secondsForExternal}
-                        setSecondsForExternal={setSecondsForExternal}
-                        succeedForExternal={succeedForExternal}
-                        setSucceedForExternal={setSucceedForExternal}
-                        isLoading={isLoading}
-                        setIsLoading={setIsLoading}
-                        isProcessing={isProcessing}
-                        setIsProcessing={setIsProcessing}
-                        pageOfPulledFromEngine={pageOfPulledFromEngine}
-                        setPageOfPulledFromEngine={setPageOfPulledFromEngine}
-                        rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
-                        setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
-                        tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
-                        setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
-                    />
-                </div>
-                <div className={`${value !== 1 ? 'hidden' : ''}`}>
-                    <EXPRegister 
-                    />
-                </div>
+                {pageToShow === 'main' ? <>
+                    <div className={`${value !== 0 ? 'hidden' : ''}`}>
+                        <Issuance
+                            isExpandStatusForExternal={isExpandStatusForExternal}
+                            setIsExpandStatusForExternal={setIsExpandStatusForExternal}
+                            isExpandTimerForExternal={isExpandTimerForExternal}
+                            setIsExpandTimerForExternal={setIsExpandTimerForExternal}
+                            isExpandMiniTimerForExternal={isExpandMiniTimerForExternal}
+                            setIsExpandMiniTimerForExternal={setIsExpandMiniTimerForExternal}
+                            isExpandMessageForExternal={isExpandMessageForExternal}
+                            setIsExpandMessageForExternal={setIsExpandMessageForExternal}
+                            secondsForExternal={secondsForExternal}
+                            setSecondsForExternal={setSecondsForExternal}
+                            succeedForExternal={succeedForExternal}
+                            setSucceedForExternal={setSucceedForExternal}
+                            isLoading={isLoading}
+                            setIsLoading={setIsLoading}
+                            isProcessing={isProcessing}
+                            setIsProcessing={setIsProcessing}
+                            pageOfPulledFromEngine={pageOfPulledFromEngine}
+                            setPageOfPulledFromEngine={setPageOfPulledFromEngine}
+                            rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
+                            setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
+                            tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
+                            setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
+                            pageToShow={pageToShow}
+                            setPageToShow={setPageToShow}
+                            setLibrary={setLibrary}
+                            chanel={chanel}
+                            setChanel={setChanel}
+                        />
+                    </div>
+                    <div className={`${value !== 1 ? 'hidden' : ''}`}>
+                        <EXPRegister
+                            pageToShow={pageToShow}
+                            setPageToShow={setPageToShow}
+                        />
+                    </div>
+                </> :
+                    <LibraryForUser
+                        setPageToShow={setPageToShow}
+                        library={library}
+                    />}
             </Box>
         </div>
     );

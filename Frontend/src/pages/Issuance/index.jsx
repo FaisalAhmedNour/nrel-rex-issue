@@ -1,4 +1,5 @@
-// Faisal (C)
+// Faisal Ahmed (C)
+// Faisal Ahmed (M) - 13 Oct 2025
 
 import React, { useEffect, useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
@@ -6,21 +7,14 @@ import Paper from '@mui/material/Paper';
 import ClearIcon from '@mui/icons-material/Clear';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import SimCardDownloadOutlinedIcon from '@mui/icons-material/SimCardDownloadOutlined';
-import LoaderPage from '../../Components/Loader/LoaderPage';
 import StickyInstructions from '../../Components/StickyInstructions/StickyInstructions';
 import ProcessController from './ProcessController';
 import TimerSection from '../../Components/TimerSection';
 import MessageTable from '../../Components/MessageTable';
 import PulledDataFromEngine from './PulledDataFromEngine';
 import { headerKeys, headers } from './lib';
-import SettingsIcon from '@mui/icons-material/Settings';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
 import FormatDownload from '../../Components/FormatDownload';
-import LibraryForUser from './libraryForUser';
-import Swal from 'sweetalert2';
+import SettingForModule from '../../Components/SettingForModule/SettingForModule';
 
 const Issuance = ({
     isExpandStatusForExternal,
@@ -45,43 +39,31 @@ const Issuance = ({
     setRowsPerPageOfPulledFromEngine,
     tableBodyDataOfPulledFromEngine,
     setTableBodyDataOfPulledFromEngine,
+    setPageToShow,
+    setLibrary,
+    chanel,
+    setChanel
 }) => {
 
     const [isStartVisible, setIsStartVisible] = useState(false);
     const [engineError, setEngineError] = useState(false);
-    const [excelPath, setExcelPath] = useState('');
-    const [folderPath, setFolderPath] = useState('');
-    const [libraries, setLibraries] = useState([]);
-    const [library, setLibrary] = useState({});
+    // formData
+    const [formState, setFormState] = useState({
+        action: 'verify',
+        withPrefix: true,
+        src: '',
+        userName: '',
+        password: '',
+        SoOSavePath: "",
+        DOCpath: ""
+    });
     // modal
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
-    const handleOpen = () => setOpen(true);
-
-    // formData
-    const [formState, setFormState] = useState({
-        createNewSoO: false,
-        filePath: '',
-        DOCpath: '',
-        INpath: '',
-        BEpath: '',
-        BLpath: '',
-        EXpath: '',
-        withPrefix: 'validation',
-        username: '',
-        password: ''
-    });
-    // Library list
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open2 = Boolean(anchorEl);
-    const handleClickOpen = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleOpen = (val = 'verify') => {
+        setFormState({ ...formState, action: val });
+        setOpen(true);
     };
-    const handleClickClose = () => {
-        setAnchorEl(null);
-    };
-    const [pageToShow, setPageToShow] = useState('main');
-
 
     const getEngineOnSignal = () => {
         window?.engine?.onProcessStart(function (message) {
@@ -97,16 +79,18 @@ const Issuance = ({
 
     // trigger engine start
     const startEngine = async (data) => {
-        // console.log("data", data);
+        console.log("data", data);
         try {
             const p = await window?.engine?.startProcess(data);
+            console.log(p);
             if (p.success === true) {
-                // setEngineStatus("Started");
                 setIsProcessing(true);
-                // setTableBodyDataOfPulledFromEngine([]);
-                // window.__slno_counter = 1;
-            } else {
-                // setEngineStatus("Start Failed");
+                handleClose();
+                if (data.action === "verify") {
+                    setChanel("ver");
+                } else {
+                    setChanel("fin");
+                }
             }
         } catch (e) {
             console.log(e);
@@ -115,32 +99,34 @@ const Issuance = ({
 
     const handleStart = async (e) => {
         e.preventDefault();
-        handleClose();
+        if (formState.action === "verify" && !formState.src) {
+            setEngineError("Please select the input file");
+            return;
+        }
+        if (
+            formState.action !== "verify" &&
+            (!formState.SoOSavePath ||
+                !formState.userName ||
+                !formState.password ||
+                !formState.SoOSavePath ||
+                !formState.DOCpath
+            )) {
+            setEngineError("Please fill all the fields");
+            return;
+        }
+        setEngineError("");
         const data = {
-            action: formState.withPrefix === "validation" ? "verify" : undefined,
-            withPrefix:
-                formState.withPrefix === "prefix"
-                    ? true
-                    : formState.withPrefix === "noPrefix"
-                        ? false
-                        : undefined,
-            applyForApplication:
-                formState.withPrefix === "validation"
-                    ? undefined
-                    : formState.withPrefix === "finalize"
-                        ? true
-                        : false,
-            Sleep: formState.withPrefix === "validation" ? undefined : 0,
-            userName: formState.withPrefix === "validation" ? undefined : formState.username,
-            password: formState.withPrefix === "validation" ? undefined : formState.password,
-            src: formState.filePath || undefined,
-            DOCpath: formState.DOCpath || undefined,
-            createNewSoO: formState.createNewSoO,
-            INpath: formState.INpath || undefined,
-            BLpath: formState.BLpath || undefined,
+            action: formState.action,
+            src: formState.action === "verify" ? formState.src : undefined,
+            withPrefix: formState.action === "verify" ? undefined : formState.withPrefix,
+            userName: formState.action === "verify" ? undefined : formState.userName,
+            password: formState.action === "verify" ? undefined : formState.password,
+            SoOSavePath: formState.action === "verify" ? undefined : formState.SoOSavePath,
+            DOCpath: formState.action === "verify" ? undefined : formState.DOCpath,
         };
         startEngine(data);
     }
+
     // trigger engine stop
     const handleStop = async () => {
         const p = await window?.engine?.stopProcess();
@@ -150,40 +136,40 @@ const Issuance = ({
         }
     };
 
-    const getInfo = async () => {
-        try {
-            // flag === "1" ? setGettingData(true) : setIsLoading(true);
-            setIsLoading(true);
-            const result = await window.engine.Proxy(`/lib/getList`, 'get');
-            // console.log('get data', result);
-            if (result?.status === 200 && result?.data?.success === true) {
-                // setAPIError(null);
-                // return result?.data;
-                // console.log('result?.data', result?.data);
-                setLibraries(result?.data?.list || []);
-            }
-            else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: result?.data?.message || "Failed to fetch library data!"
-                });
-            }
-        } catch (error) {
-            console.log(error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: error?.message || "Failed to fetch library data!"
-            })
-        } finally {
-            // flag === "1" ? setGettingData(false) : setIsLoading(false);
-            setIsLoading(false);
-        }
-    }
+    // const getInfo = async () => {
+    //     try {
+    //         // flag === "1" ? setGettingData(true) : setIsLoading(true);
+    //         setIsLoading(true);
+    //         const result = await window.engine.Proxy(`/lib/getList`, 'get');
+    //         // console.log('get data', result);
+    //         if (result?.status === 200 && result?.data?.success === true) {
+    //             // setAPIError(null);
+    //             // return result?.data;
+    //             // console.log('result?.data', result?.data);
+    //             setLibraries(result?.data?.list || []);
+    //         }
+    //         else {
+    //             Swal.fire({
+    //                 icon: 'error',
+    //                 title: 'Error!',
+    //                 text: result?.data?.message || "Failed to fetch library data!"
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         Swal.fire({
+    //             icon: 'error',
+    //             title: 'Error!',
+    //             text: error?.message || "Failed to fetch library data!"
+    //         })
+    //     } finally {
+    //         // flag === "1" ? setGettingData(false) : setIsLoading(false);
+    //         setIsLoading(false);
+    //     }
+    // }
 
     useEffect(() => {
-        getInfo();
+        // getInfo();
         getEngineOnSignal();
         getEngineOffSignal();
 
@@ -220,74 +206,18 @@ const Issuance = ({
     }, []);
 
     return (
-        <div className="overflow-hidden">
-            <div className="absolute flex justify-between w-full px-2">
-                <div className="flex items-center gap-2 mt-1">
+        <div className="overflow-hidden mt-1">
+            <div className="flex justify-between w-full px-1">
+                <div className="flex items-center gap-2">
                     <StickyInstructions
                         title={"Rex Issuance"}
                     />
-                    <Tooltip title={"Library"} arrow placement="right" disableInteractive>
-                        <Paper
-                            sx={{
-                                overflow: "hidden",
-                                py: 1,
-                                px: 1,
-                                width: 40,
-                                height: 40
-                            }}
-                            className="space-y-1"
-                            onClick={handleClickOpen}
-                        >
-                            <SettingsIcon
-                                sx={{
-                                    color: "gray",
-                                    cursor: "pointer",
-                                }}
-                            />
-                        </Paper>
-                    </Tooltip>
-                    <Menu
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        anchorEl={anchorEl}
-                        open={open2}
-                        onClose={handleClickClose}
-                    >
-                        <MenuList dense sx={{ outline: 'none' }}>
-                            {console.log("libraries", libraries) ||
-                            libraries &&
-                                libraries?.length > 0 &&
-                                libraries.map((libraryData, index) => (
-                                    <MenuItem
-                                        key={libraryData?._id || index}
-                                        sx={{
-                                            display: 'flex',
-                                            gap: 1,
-                                            maxHeight: 20,
-                                            height: 25,
-                                            fontSize: 14,
-                                            // borderColor: '#f5f5f5',
-                                            borderTop: '1px solid #e5e5e5',
-                                            borderBottom: '1px solid #e5e5e5'
-                                        }}
-                                        onClick={() => {
-                                            setPageToShow('library');
-                                            setLibrary(libraryData);
-                                            handleClickClose();
-                                        }}
-                                    >
-                                        {libraryData?.Value?.displayName ? libraryData?.Value?.displayName : libraryData?.Name}
-                                    </MenuItem>
-                                ))}
-                        </MenuList>
-                    </Menu>
-                    <Tooltip title={"Timer Details"} arrow placement="right" disableInteractive>
+                    <SettingForModule
+                        setIsLoading={setIsLoading}
+                        setLibrary={setLibrary}
+                        setPageToShow={setPageToShow}
+                    />
+                    <Tooltip title={isExpandTimerForExternal ? "Close Timer" : "Open Timer"} arrow placement="right" disableInteractive>
                         <Paper
                             sx={{
                                 // width: isExpandMiniTimer ? 120 : 40,
@@ -323,14 +253,14 @@ const Issuance = ({
                                             {String(Math.floor((secondsForExternal % 3600) / 60)).padStart(2, "0")} :{" "}
                                             {String(secondsForExternal % 60).padStart(2, "0")}
                                         </span></p>
-                                        <p className="font-bold tracking-wide font-roboto text-sm">Pulled: {succeedForExternal}</p>
+                                        <p className="font-bold tracking-wide font-roboto text-sm">{formState.action === "verify" ? "Verified" : "Issued"}: {succeedForExternal}</p>
                                     </div>}
                                 </div>}
                         </Paper>
                     </Tooltip>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Tooltip title={"Message Table"} arrow placement="left" disableInteractive>
+                    <Tooltip title={isExpandMessageForExternal ? "Close Message" : "Open Message"} arrow placement="left" disableInteractive>
                         <Paper
                             sx={{
                                 width: 40,
@@ -343,7 +273,7 @@ const Issuance = ({
                             {isExpandMessageForExternal ?
                                 <ClearIcon
                                     sx={{
-                                        color: "gray",
+                                        color: "red",
                                         cursor: "pointer",
                                         fontSize: 20
                                     }}
@@ -373,18 +303,19 @@ const Issuance = ({
                 setFormState={setFormState}
             />
             <div
-                className={`flex ${isExpandTimerForExternal && isExpandMessageForExternal ? "gap-2" : "gap-0"} w-full overflow-hidden pt-12 px-2`}
+                className={`flex ${isExpandTimerForExternal && isExpandMessageForExternal ? "gap-2" : "gap-0"} w-full overflow-hidden pt-2 px-1`}
                 style={{
-                    height: (isExpandTimerForExternal || isExpandMessageForExternal) ? 230 : 0,
+                    height: (isExpandTimerForExternal || isExpandMessageForExternal) ? 190 : 0,
                     transition: "height 1s",
                 }}
             >
                 <TimerSection
                     isDataToRun={true}
-                    dataToRunText={'Rex to Issue'}
+                    dataToRunText={formState.action === "verify" ? "Rex to Verify" : "Rex to Issue"}
                     isSuccess={true}
-                    successText={"Issued"}
+                    successText={formState.action === "verify" ? "Verified" : "Issued"}
                     isFaild={true}
+                    chnl={chanel}
                     isExpand={isExpandTimerForExternal}
                     setIsExpand={setIsExpandTimerForExternal}
                     setSucceed={setSucceedForExternal}
@@ -392,30 +323,23 @@ const Issuance = ({
                     setSeconds={setSecondsForExternal}
                 />
                 <MessageTable
+                    chnl={chanel}
                     isExpandMessage={isExpandMessageForExternal}
-                    setIsExpandMessage={setIsExpandMessageForExternal}
-                    isExpandStatus={isExpandStatusForExternal}
-                    setIsExpandStatus={setIsExpandStatusForExternal}
                 />
             </div>
-            {pageToShow === 'main' ?
-                <PulledDataFromEngine
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    isProcessing={isProcessing}
-                    pageOfPulledFromEngine={pageOfPulledFromEngine}
-                    setPageOfPulledFromEngine={setPageOfPulledFromEngine}
-                    rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
-                    setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
-                    tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
-                    setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
-                    handleOpen={handleOpen}
-                    handleStop={handleStop}
-                /> :
-                <LibraryForUser
-                    setPageToShow={setPageToShow}
-                    library={library}
-                />}
+            <PulledDataFromEngine
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                isProcessing={isProcessing}
+                pageOfPulledFromEngine={pageOfPulledFromEngine}
+                setPageOfPulledFromEngine={setPageOfPulledFromEngine}
+                rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
+                setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
+                tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
+                setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
+                handleOpen={handleOpen}
+                handleStop={handleStop}
+            />
         </div>
     );
 };

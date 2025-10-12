@@ -6,7 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
-import { TableHeadStyle3 } from "../../../lib";
+import { TableHeadStyle4 } from "../../../lib";
 
 const Body = ({
     headers,
@@ -29,7 +29,7 @@ const Body = ({
                 stickyHeader
                 size="small"
                 sx={{
-                    border: 1,
+                    // border: 1,
                     borderBottom: 0,
                 }}
             >
@@ -40,10 +40,10 @@ const Body = ({
                             <TableCell
                                 align="center"
                                 sx={{
-                                    ...TableHeadStyle3,
+                                    ...TableHeadStyle4,
                                     position: "sticky",
                                     right: 0,
-                                    borderLeft: 0
+                                    // borderLeft: 0
                                 }}
                             >
                                 <Checkbox
@@ -66,8 +66,8 @@ const Body = ({
                                     align="center"
                                     key={header}
                                     sx={{
-                                        ...TableHeadStyle3,
-                                        borderLeft: index === 0 ? (isSelectOption ? 1 : 0) : 1
+                                        ...TableHeadStyle4,
+                                        // borderLeft: index === 0 ? (isSelectOption ? 1 : 0) : 1
                                     }}
                                 >
                                     {header}
@@ -94,7 +94,7 @@ const Body = ({
                                             py: '1px',
                                             position: "sticky",
                                             right: 0,
-                                            borderLeft: 0,
+                                            // borderLeft: 0,
                                             bgcolor: row?.isError ? 'red' : 'white',
                                             borderBottom: '1px solid black'
                                         }}
@@ -119,7 +119,7 @@ const Body = ({
                                                 py: '1px',
                                                 px: .5,
                                                 fontSize: 14,
-                                                borderLeft: indx === 0 ? (isSelectOption ? 1 : 0) : 1,
+                                                // borderLeft: indx === 0 ? (isSelectOption ? 1 : 0) : 1,
                                                 // borderColor: 'black'
                                                 bgcolor: row?.isError ? 'red' : 'white',
                                                 borderBottom: '1px solid black'

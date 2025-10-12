@@ -1,6 +1,6 @@
 import { TableCell } from '@mui/material';
 import React from 'react';
-import { TableHeadStyle3 } from '../lib';
+import { TableHeadStyle4 } from '../lib';
 
 const MessageTableHeadRow = ({title,style,ind}) => {
 
@@ -9,7 +9,7 @@ const MessageTableHeadRow = ({title,style,ind}) => {
     }
     return (
         <TableCell
-            sx={{...TableHeadStyle3, ...style}}
+            sx={{...TableHeadStyle4, ...style}}
             // align={ind === 0 ?'left':'center'}
             align='left'
 

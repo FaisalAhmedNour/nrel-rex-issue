@@ -1,13 +1,10 @@
-// Faisal (C) 3 April 2025
-// Faisal (M) 24 June 2025
+// Faisal Ahmed (C) 3 April 2025
+// Faisal Ahmed (M) - 13 Oct 2025
 
 import { useEffect, useRef, useState } from "react";
-import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ClearIcon from '@mui/icons-material/Clear';
-import LaunchIcon from '@mui/icons-material/Launch';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const TimerSection = ({
   isDataToRun,
@@ -15,7 +12,7 @@ const TimerSection = ({
   isSuccess,
   successText,
   isFaild,
-  // cl,
+  chnl,
   isExpand,
   setIsExpand,
   setSucceed,
@@ -63,20 +60,17 @@ const TimerSection = ({
     window.engine.onStatus(function (status) {
       console.log("status", status);
       let { channel, total, complete, failed, speed, title, details } = status;
-      // console.log("status", status)/
-      // if (channel === "cpo") {
-      setSucceed(complete);
-      // }
-      // if (channel === cl) {
-      if (typeof title === 'string') setTitle(title)
-      if (typeof total === 'number') setDataToExtract(total)
-      if (typeof complete === 'number') setSuccessCount(complete);
-      if (typeof failed === 'number') setFailedCount(failed)
-      if (typeof details === 'string') setDetails(details)
-      if (typeof total === 'number' && typeof complete === 'number' && typeof failed === 'number') {
-        setRemainingTime(calculateRemainingTime(total, complete, failed, speed))
+      if (channel === chnl) {
+        setSucceed(complete);
+        if (typeof title === 'string') setTitle(title)
+        if (typeof total === 'number') setDataToExtract(total)
+        if (typeof complete === 'number') setSuccessCount(complete);
+        if (typeof failed === 'number') setFailedCount(failed)
+        if (typeof details === 'string') setDetails(details)
+        if (typeof total === 'number' && typeof complete === 'number' && typeof failed === 'number') {
+          setRemainingTime(calculateRemainingTime(total, complete, failed, speed))
+        }
       }
-      // }
     })
   }
 
@@ -104,6 +98,10 @@ const TimerSection = ({
 
   useEffect(() => {
     fetchStatus();
+    return undefined;
+  }, [chnl]);
+
+  useEffect(() => {
     fetchLog();
     getEngineOffSignal();
     getEngineOnSignal();
@@ -116,9 +114,10 @@ const TimerSection = ({
         overflow: "hidden",
         width: isExpand ? 250 : 0,
         height: isExpand ? 180 : 0,
+        minWidth: isExpand ? 250 : 0,
         pt: isExpand ? 1.5 : 0,
         pb: 0,
-        transition: "width 1s,height 1s, min-height 1s",
+        transition: "width 1s,height 1s, min-width 1s",
       }}
       className="space-y-1 flex flex-col relative"
     >
@@ -217,7 +216,7 @@ const TimerSection = ({
             <span>{failedCount}</span>
           </Typography>
         )}
-        {isExpand && remainingTime != 0 && (
+        {/* {isExpand && remainingTime != 0 && (
           <Typography
             sx={{
               paddingY: 0,
@@ -230,13 +229,11 @@ const TimerSection = ({
             }}
           >
             <span className="flex text-[red]">
-              {/* <img src="./Failed.svg" alt="Success" className="w-3 mx-[2px]" /> */}
               Time Left
             </span>
             <span>{remainingTime}</span>
-            {/* {remainingTime} */}
           </Typography>
-        )}
+        )} */}
         {isExpand && seconds != 0 && (
           <Typography
             sx={{

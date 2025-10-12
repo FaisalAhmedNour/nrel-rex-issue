@@ -198,10 +198,10 @@ const EXPRegister = ({loading, setLoading}) => {
   }, []);
 
   return (
-    <div className="relative mb-5">
+    <div className="relative mb-5 mt-1">
       <LoaderPage open={loading} />
-      <div className="absolute flex justify-between w-full px-2">
-        <div className="flex items-center gap-2 mt-1">
+      <div className="absolute flex justify-between w-full px-1">
+        <div className="flex items-center gap-2">
           <StickyInstructions
             title={"Exp Register"}
           />

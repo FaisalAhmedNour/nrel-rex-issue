@@ -1,3 +1,6 @@
+// Faisal Ahmed (C)
+// Faisal Ahmed (M) - 13 Oct 2025
+
 import { useState } from 'react';
 import CustomTable from '../../Components/CustomTable/CustomTable';
 import { fullHeaders } from './lib';
@@ -5,6 +8,7 @@ import Pagination from '../../Components/CustomTable/Pagination/Pagination';
 import Body from '../../Components/CustomTable/Body/Body';
 import exportToExcel from '../../Functions/exportToExcel';
 import Button from '@mui/material/Button';
+import { heightLightButton } from '../../lib';
 
 const PulledDataFromEngine = ({
     isLoading,
@@ -44,7 +48,7 @@ const PulledDataFromEngine = ({
 
     return (
         <CustomTable
-            className={'px-2 mt-0'}
+            className={'px-2 mt-1'}
             headerTitle={"Response Data"}
             headerButtons={[
                 <>
@@ -54,29 +58,28 @@ const PulledDataFromEngine = ({
                             variant='contained'
                             onClick={handleStop}
                             color='error'
-                            sx={{
-                                height: 25,
-                                textTransform: 'capitalize',
-                                gap: .5,
-                                // bgcolor: 'error.main',
-                                color: 'white',
-                                // ":hover": {
-                                //     // bgcolor: 'error.main',
-                                // }
-                            }}
+                            sx={{ height: 25 }}
                         >Stop</Button> :
-                        <Button
-                            size='small'
-                            variant='contained'
-                            color='success'
-                            sx={{
-                                height: 25,
-                                textTransform: 'capitalize'
-                            }}
-                            onClick={handleOpen}
-                        >
-                            Start Issue
-                        </Button>
+                        <div className='flex justify-center items-center gap-1'>
+                            <Button
+                                size='small'
+                                variant='contained'
+                                color='success'
+                                sx={heightLightButton}
+                                onClick={() => handleOpen("verify")}
+                            >
+                                Start Verify
+                            </Button>
+                            <Button
+                                size='small'
+                                variant='contained'
+                                color='success'
+                                sx={heightLightButton}
+                                onClick={() => handleOpen("payslip")}
+                            >
+                                Start Issue
+                            </Button>
+                        </div>
                     }
                 </>
             ]}

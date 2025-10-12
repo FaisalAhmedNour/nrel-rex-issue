@@ -18,6 +18,7 @@ import Body from "../../../Components/CustomTable/Body/Body";
 import CustomTable from "../../../Components/CustomTable/CustomTable";
 import ExportExcelButton from "../../../Components/ExportExcelButton";
 import Pagination from "../../../Components/CustomTable/Pagination/Pagination";
+import { heightLightButton } from "../../../lib";
 // import CustomTable from "../../../../Components/CustomTable/CustomTable";
 // import ExportExcelButton from "../../../../Components/ExportExcelButton";
 // import Pagination from "../../../../Components/CustomTable/Pagination/Pagination";
@@ -192,7 +193,7 @@ export default function ExpRegisterTable({
             size="small"
             color="success"
             variant="contained"
-            sx={{ height: 25 }}
+            sx={heightLightButton}
             onClick={handleOpen}
           >
             Upload

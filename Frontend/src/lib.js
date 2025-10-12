@@ -51,6 +51,28 @@ export const TableHeadStyle3 = {
     textTransform: 'capitalize'
 };
 
+export const TableHeadStyle4 = {
+    backgroundColor: "#f7f7f7",
+    '&:hover': {
+        backgroundColor: "#ededed",
+    },
+    color: 'black',
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
+    py: '1px',
+    px: 1,
+    textTransform: 'capitalize'
+};
+
+export const heightLightButton = {
+    height: 25,
+    px: 2,
+    backgroundColor: '#00243d',
+    '&:hover': {
+        backgroundColor: '#003d6d',
+    },
+}
+
 export const buyersType = {
     BS: 'BestSeller',
     HNM: 'H&M'

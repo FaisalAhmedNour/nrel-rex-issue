@@ -2,12 +2,13 @@
 // Faisal Ahmed (M) - 28 Sep 2025
 
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import DownloadIcon from '@mui/icons-material/Download';
+import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -21,7 +22,6 @@ import LoaderPage from '../../Components/Loader/LoaderPage';
 import CustomTable from '../../Components/CustomTable/CustomTable';
 import exportToExcel from '../../Functions/exportToExcel';
 import Field from './Field';
-import Swal from 'sweetalert2';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -32,12 +32,9 @@ import TableRow from '@mui/material/TableRow';
 import Pagination from '../../Components/CustomTable/Pagination/Pagination';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { TableHeadStyle3 } from '../../lib';
+import { TableHeadStyle4 } from '../../lib';
 
 const LibraryForUser = ({ library, setPageToShow }) => {
-    useEffect(() => {
-        console.log('library', library);
-    }, [library]);
     // form data
     const [formData, setFormData] = useState({});
     // const [action, setAction] = useState('add');
@@ -178,7 +175,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
         try {
             flag === "1" ? setGettingData(true) : setIsLoading(true);
             const result = await window.engine.Proxy(`/lib/getRecords?Name=${library?.Name}`, 'get');
-            console.log('get data', result);
+            // console.log('get data', result);
             if (result?.status === 200 && result?.data?.success === true) {
                 setAPIError(null);
                 return result?.data;
@@ -254,7 +251,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
             })
             return rowData;
         })
-        console.log('Exporting', tableDataToExport, headersToExport);
+        // console.log('Exporting', tableDataToExport, headersToExport);
         exportToExcel(tableDataToExport, headersToExport, 'Country Buyer Details For Rex', setIsDownloading, true);
     }
 
@@ -336,9 +333,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                     headerButtons={[
                         <Button
                             variant="outlined"
-                            sx={{
-                                height: '25px'
-                            }}
+                            sx={{ height: '25px' }}
                             color='error'
                             startIcon={<KeyboardBackspaceIcon />}
                             onClick={() => setPageToShow('main')}
@@ -350,9 +345,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                             <Button
                                 variant="outlined"
                                 color='success'
-                                sx={{
-                                    height: '25px'
-                                }}
+                                sx={{ height: '25px' }}
                                 onClick={handleSave}
                             >
                                 Save
@@ -371,21 +364,19 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                 <Button
                                     size="small"
                                     variant="outlined"
-                                    startIcon={<DownloadIcon />}
+                                    startIcon={<GetAppOutlinedIcon />}
                                     sx={{ height: 25 }}
                                     onClick={handleExport}
                                     disabled={isDownloading}
                                 >
-                                    Export
+                                    Export To Excel
                                 </Button>,
                                 <>{
                                     isSaveActive &&
                                     <Button
                                         size='small'
                                         variant="outlined"
-                                        sx={{
-                                            height: '25px'
-                                        }}
+                                        sx={{ height: '25px' }}
                                         startIcon={<ReplayOutlinedIcon />}
                                         onClick={() => setReload(prev => !prev)}
                                     >
@@ -405,7 +396,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                 size="small"
                                 sx={{
                                     // mb: 20,
-                                    border: 1,
+                                    // border: 1,
                                     borderBottom: 0,
                                 }}
                             >
@@ -416,7 +407,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                             <TableCell
                                                 align="center"
                                                 sx={{
-                                                    ...TableHeadStyle3,
+                                                    ...TableHeadStyle4,
                                                     borderLeft: 0,
                                                     position: 'sticky',
                                                     left: 0,
@@ -430,34 +421,11 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                 align="center"
                                                 key={index}
                                                 sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
+                                                    ...TableHeadStyle4,
+                                                    // borderLeft: 1,
                                                     px: '2px',
                                                 }}
                                             >
-                                                {/* <FormControl sx={{ width: 200 }}>
-                                                    <Select
-                                                        size='small'
-                                                        sx={{
-                                                            height: "20px",
-                                                            fontSize: 14
-                                                        }}
-                                                        className='editableInput'
-                                                        value={header?.sourceLibrary || ''}
-                                                        onChange={(e) => handleEdit && handleEdit(true, false, index, 'sourceLibrary', e.target.value)}
-                                                    >
-                                                        <MenuItem
-                                                            value={''}
-                                                            sx={{ height: 20, fontSize: 14 }}
-                                                        >Please Select</MenuItem>
-                                                        {suggestionsSetLibraryName && suggestionsSetLibraryName?.length > 0 &&
-                                                            suggestionsSetLibraryName.map((name) => <MenuItem
-                                                                value={name}
-                                                                key={name}
-                                                                sx={{ height: 20, fontSize: 14 }}
-                                                            >{name}</MenuItem>)}
-                                                    </Select>
-                                                </FormControl> */}
                                                 {header?.sourceLibrary}
                                             </TableCell>
                                         ))}
@@ -465,8 +433,9 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                             rowSpan={4}
                                             align="center"
                                             sx={{
-                                                ...TableHeadStyle3,
+                                                ...TableHeadStyle4,
                                                 borderLeft: 1,
+                                                borderColor: 'inherit',
                                                 px: '2px',
                                                 position: 'sticky',
                                                 right: 0,
@@ -476,88 +445,13 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                             Action
                                         </TableCell>}
                                     </TableRow>
-                                    {/* Name */}
-                                    {/* <TableRow sx={{ position: 'relative' }}>
-                                        {headers && headers?.length > 0 &&
-                                            <TableCell
-                                                align="center"
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 0,
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    zIndex: 100,
-                                                }}
-                                            >
-                                                <span className="w-[200px]">hName: string;</span>
-                                            </TableCell>}
-                                        {headers && headers?.length > 0 && headers.map((header, index) => (
-                                            <TableCell
-                                                align="center"
-                                                key={index}
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
-                                                    px: '2px',
-                                                }}
-                                            >
-                                                {header?.sourceLibrary === '' ?
-                                                    <TextField
-                                                        className={isAdvancedSettings ? "editableInput" : "fixedInput"}
-                                                        size="small"
-                                                        fullWidth
-                                                        type="text"
-                                                        value={header?.hName || ''}
-                                                        InputProps={{ readOnly: isAdvancedSettings ? false : true }}
-                                                        onChange={(e) => handleEdit && handleEdit(true, false, index, 'hName', e.target.value)}
-                                                        sx={{
-                                                            width: 200,
-                                                            borderRadius: 1,
-                                                            "& .MuiInputBase-root": {
-                                                                height: 20,
-                                                                overflow: "hidden",
-                                                                fontSize: 14,
-                                                            },
-                                                        }}
-                                                        variant="outlined"
-                                                    /> :
-                                                    <FormControl sx={{ width: 200 }}>
-                                                        <Select
-                                                            size='small'
-                                                            sx={{
-                                                                height: "20px",
-                                                                fontSize: 14
-                                                            }}
-                                                            className='editableInput'
-                                                            value={header?.hName || ''}
-                                                            onChange={(e) => handleEdit && handleEdit(true, false, index, 'hName', e.target.value)}
-                                                        >
-                                                            <MenuItem
-                                                                value={''}
-                                                                sx={{ height: 20, fontSize: 14 }}
-                                                            >Please Select</MenuItem>
-                                                            {
-                                                                // console.log("sourceLibraryData", sourceLibraryData?.[header?.hName], header?.hName) &&
-                                                                sourceLibraryHeaders?.[header?.sourceLibrary] &&
-                                                                sourceLibraryHeaders?.[header?.sourceLibrary]?.length > 0 &&
-                                                                sourceLibraryHeaders?.[header?.sourceLibrary].map((name: ILibraryHeaderProps) => <MenuItem
-                                                                    value={name?.hName}
-                                                                    key={name?.ID}
-                                                                    sx={{ height: 20, fontSize: 14 }}
-                                                                >{name?.hName}</MenuItem>)}
-                                                        </Select>
-                                                    </FormControl>}
-                                            </TableCell>
-                                        ))}
-
-                                    </TableRow> */}
                                     {/* Display Name */}
                                     <TableRow sx={{ position: 'relative' }}>
                                         {headers && headers?.length > 0 &&
                                             <TableCell
                                                 align="center"
                                                 sx={{
-                                                    ...TableHeadStyle3,
+                                                    ...TableHeadStyle4,
                                                     borderLeft: 0,
                                                     position: 'sticky',
                                                     left: 0,
@@ -571,25 +465,14 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                 align="center"
                                                 key={index}
                                                 sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
+                                                    ...TableHeadStyle4,
+                                                    // borderLeft: 1,
                                                     px: '2px',
                                                 }}
                                             >
                                                 {header?.displayName}
                                             </TableCell>
                                         ))}
-                                        {/* {headers && headers?.length > 0 && <TableCell
-                                            // rowSpan={9}
-                                            align="center"
-                                            sx={{
-                                                ...TableHeadStyle3,
-                                                borderLeft: 1,
-                                                px: '2px',
-                                            }}
-                                        >
-                                            Action
-                                        </TableCell>} */}
                                     </TableRow>
                                     {/* Primary */}
                                     <TableRow sx={{ position: 'relative' }}>
@@ -597,7 +480,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                             <TableCell
                                                 align="center"
                                                 sx={{
-                                                    ...TableHeadStyle3,
+                                                    ...TableHeadStyle4,
                                                     borderLeft: 0,
                                                     position: 'sticky',
                                                     left: 0,
@@ -611,26 +494,11 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                 align="center"
                                                 key={index}
                                                 sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
+                                                    ...TableHeadStyle4,
+                                                    // borderLeft: 1,
                                                     px: '2px',
                                                 }}
                                             >
-                                                {/* <FormControl sx={{ width: 200 }}>
-                                                    <Select
-                                                        size='small'
-                                                        value={header?.primary ? "true" : "false"}
-                                                        sx={{
-                                                            height: "20px",
-                                                            fontSize: 14
-                                                        }}
-                                                        className='editableInput'
-                                                        onChange={(e) => handleEdit && handleEdit(true, false, index, 'primary', e.target.value === "true")}
-                                                    >
-                                                        <MenuItem sx={{ height: 20, fontSize: 14 }} value="true">Yes</MenuItem>
-                                                        <MenuItem sx={{ height: 20, fontSize: 14 }} value="false">No</MenuItem>
-                                                    </Select>
-                                                </FormControl> */}
                                                 {header?.primary ? "Yes" : "No"}
                                             </TableCell>
                                         ))}
@@ -641,7 +509,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                             <TableCell
                                                 align="center"
                                                 sx={{
-                                                    ...TableHeadStyle3,
+                                                    ...TableHeadStyle4,
                                                     borderLeft: 0,
                                                     position: 'sticky',
                                                     left: 0,
@@ -655,208 +523,15 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                 align="center"
                                                 key={index}
                                                 sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
+                                                    ...TableHeadStyle4,
+                                                    // borderLeft: 1,
                                                     px: '2px',
                                                 }}
                                             >
-                                                {/* <FormControl sx={{ width: 200 }}>
-                                                    <Select
-                                                        size='small'
-                                                        value={header?.required ? "true" : "false"}
-                                                        sx={{
-                                                            height: "20px",
-                                                            fontSize: 14
-                                                        }}
-                                                        className='editableInput'
-                                                        onChange={(e) => handleEdit && handleEdit(true, false, index, 'required', e.target.value === "true")}
-                                                    >
-                                                        <MenuItem sx={{ height: 20, fontSize: 14 }} value="true">Yes</MenuItem>
-                                                        <MenuItem sx={{ height: 20, fontSize: 14 }} value="false">No</MenuItem>
-                                                    </Select>
-                                                </FormControl> */}
                                                 {header?.required ? "Yes" : "No"}
                                             </TableCell>
                                         ))}
                                     </TableRow>
-                                    {/* Length */}
-                                    {/* <TableRow sx={{ position: 'relative' }}>
-                                        {headers && headers?.length > 0 &&
-                                            <TableCell
-                                                align="center"
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 0,
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    zIndex: 100,
-                                                }}
-                                            >
-                                                <span className="w-[200px]">length?: number;</span>
-                                            </TableCell>}
-                                        {headers && headers?.length > 0 && headers.map((header, index) => (
-                                            <TableCell
-                                                align="center"
-                                                key={index}
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
-                                                    px: '2px',
-                                                }}
-                                            >
-                                                <TextField
-                                                    value={header?.length || ''}
-                                                    size="small"
-                                                    type='number'
-                                                    name='length'
-                                                    variant="outlined"
-                                                    className='editableInput'
-                                                    sx={{
-                                                        width: 200,
-                                                        borderRadius: 1,
-                                                        '& .MuiInputBase-root': {
-                                                            height: '20px',
-                                                            fontSize: 14
-                                                        }
-                                                    }}
-                                                    onChange={(e) => handleEdit && handleEdit(true, false, index, 'length', Number(e.target.value))}
-                                                />
-                                            </TableCell>
-                                        ))}
-                                    </TableRow> */}
-                                    {/* Min */}
-                                    {/* <TableRow sx={{ position: 'relative' }}>
-                                        {headers && headers?.length > 0 &&
-                                            <TableCell
-                                                align="center"
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 0,
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    zIndex: 100,
-                                                }}
-                                            >
-                                                <span className="w-[200px]">min?: number;</span>
-                                            </TableCell>}
-                                        {headers && headers?.length > 0 && headers.map((header, index) => (
-                                            <TableCell
-                                                align="center"
-                                                key={index}
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
-                                                    px: '2px',
-                                                }}
-                                            >
-                                                <TextField
-                                                    value={header?.min || ''}
-                                                    size="small"
-                                                    type='number'
-                                                    name='min'
-                                                    variant="outlined"
-                                                    className='editableInput'
-                                                    sx={{
-                                                        width: 200,
-                                                        borderRadius: 1,
-                                                        '& .MuiInputBase-root': {
-                                                            height: '20px',
-                                                            fontSize: 14
-                                                        }
-                                                    }}
-                                                    onChange={(e) => handleEdit && handleEdit(true, false, index, 'min', Number(e.target.value))}
-                                                />
-                                            </TableCell>
-                                        ))}
-                                    </TableRow> */}
-                                    {/* Max */}
-                                    {/* <TableRow sx={{ position: 'relative' }}>
-                                        {headers && headers?.length > 0 &&
-                                            <TableCell
-                                                align="center"
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 0,
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    zIndex: 100,
-                                                }}
-                                            >
-                                                <span className="w-[200px]">max?: number;</span>
-                                            </TableCell>}
-                                        {headers && headers?.length > 0 && headers.map((header, index) => (
-                                            <TableCell
-                                                align="center"
-                                                key={index}
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
-                                                    px: '2px',
-                                                }}
-                                            >
-                                                <TextField
-                                                    value={header?.max || ''}
-                                                    size="small"
-                                                    type='number'
-                                                    name='max'
-                                                    variant="outlined"
-                                                    className='editableInput'
-                                                    sx={{
-                                                        width: 200,
-                                                        borderRadius: 1,
-                                                        '& .MuiInputBase-root': {
-                                                            height: '20px',
-                                                            fontSize: 14
-                                                        }
-                                                    }}
-                                                    onChange={(e) => handleEdit && handleEdit(true, false, index, 'max', Number(e.target.value))}
-                                                />
-                                            </TableCell>
-                                        ))}
-                                    </TableRow> */}
-                                    {/* Hidden */}
-                                    {/* <TableRow sx={{ position: 'relative' }}>
-                                        {headers && headers?.length > 0 &&
-                                            <TableCell
-                                                align="center"
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 0,
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    zIndex: 100,
-                                                }}
-                                            >
-                                                <span className="w-[200px]">hidden: boolean;</span>
-                                            </TableCell>}
-                                        {headers && headers?.length > 0 && headers.map((header, index) => (
-                                            <TableCell
-                                                align="center"
-                                                key={index}
-                                                sx={{
-                                                    ...TableHeadStyle3,
-                                                    borderLeft: 1,
-                                                    px: '2px',
-                                                }}
-                                            >
-                                                <FormControl sx={{ width: 200 }}>
-                                                    <Select
-                                                        size='small'
-                                                        value={header?.hidden ? "true" : "false"}
-                                                        className='editableInput'
-                                                        sx={{
-                                                            height: "20px",
-                                                            fontSize: 14
-                                                        }}
-                                                        onChange={(e) => handleEdit && handleEdit(true, false, index, 'hidden', e.target.value === "true")}
-                                                    >
-                                                        <MenuItem sx={{ height: 20, fontSize: 14 }} value="true">Yes</MenuItem>
-                                                        <MenuItem sx={{ height: 20, fontSize: 14 }} value="false">No</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </TableCell>
-                                        ))}
-                                    </TableRow> */}
                                 </TableHead>
                                 <TableBody>
                                     {tableData &&
@@ -874,7 +549,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                             fontSize: 14,
                                                             borderLeft: 0,
                                                             whiteSpace: "nowrap",
-                                                            borderBottom: '1px solid black',
+                                                            // borderBottom: '1px solid black',
                                                             position: 'sticky',
                                                             left: 0,
                                                             bgcolor: 'white',
@@ -893,8 +568,8 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                                     py: '1px',
                                                                     fontSize: 14,
                                                                     px: '2px',
-                                                                    borderLeft: 1,
-                                                                    borderBottom: '1px solid black'
+                                                                    // borderLeft: 1,
+                                                                    // borderBottom: '1px solid black'
                                                                 }}
                                                             >
                                                                 <Field
@@ -919,9 +594,9 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                             whiteSpace: "nowrap",
                                                             py: '1px',
                                                             fontSize: 14,
-                                                            borderLeft: 1,
+                                                            // borderLeft: 1,
                                                             bgcolor: 'white',
-                                                            borderBottom: '1px solid black'
+                                                            // borderBottom: '1px solid black'
                                                         }}
                                                     >
                                                         {(row?.id || row.action == 'add') ?
@@ -965,7 +640,7 @@ const LibraryForUser = ({ library, setPageToShow }) => {
                                                 p: 0,
                                                 border: 0,
                                                 fontSize: 14,
-                                                borderBottom: 1,
+                                                // borderBottom: 1,
                                                 background: 'transparent',
                                             }}
                                             colSpan={headers.length + 2}

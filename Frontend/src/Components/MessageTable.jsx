@@ -1,4 +1,5 @@
-// Faisal (C) 9 April 2025
+// Faisal Ahmed (C) 9 April 2025
+// Faisal Ahmed (M) - 13 Oct 2025
 
 import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
@@ -27,34 +28,46 @@ const getEngineStartMessage = () => {
     return defaultMessage;
 }
 
-const MessageTable = ({ isExpandMessage, setIsExpandMessage }) => {
-    const [messages, setMessages] = useState(getStartingMessage);
+const MessageTable = ({ isExpandMessage, chnl }) => {
+    const [messages, setMessages] = useState([]);
     const titles = ["Time Stamp", "Title", "Message"];
 
     const fetchMessage = () => {
         window.engine.onMessage(function (msg) {
             // console.log("msg", msg);
-            const messageData = {};
-            messageData.time = (new Date()).toLocaleTimeString();
-            messageData.message = msg.message
-            messageData.title = msg.title
-            // [n => 'normal', w => 'warning', e => 'error']
-            setMessages(prev => [messageData, ...prev]);
+            // const messageData = {};
+            // messageData.time = (new Date()).toLocaleTimeString();
+            // messageData.message = msg.message
+            // messageData.title = msg.title
+            // // [n => 'normal', w => 'warning', e => 'error']
+            // setMessages(prev => [messageData, ...prev]);
+            if (msg?.chanel === chnl) {
+                const messageData = {};
+                messageData.time = (new Date()).toLocaleTimeString();
+                messageData.message = msg.message
+                messageData.title = msg.title
+                // [n => 'normal', w => 'warning', e => 'error']
+                setMessages(prev => [messageData, ...prev]);
+            }
         })
     }
 
-    const getEngineOnSignal = () => {
-        window.engine.onProcessStart(function (message) {
-            console.log("message start", message);
-            // setMessages(prev => [getEngineStartMessage(), ...prev]);
-        });
-    }
+    // const getEngineOnSignal = () => {
+    //     window.engine.onProcessStart(function (message) {
+    //         // console.log("message start", message);
+    //         // setMessages(prev => [getEngineStartMessage(), ...prev]);
+    //     });
+    // }
 
     useEffect(() => {
-        getEngineOnSignal();
         fetchMessage();
         return undefined;
-    }, []);
+    }, [chnl]);
+
+    // useEffect(() => {
+    //     getEngineOnSignal();
+    //     return undefined;
+    // }, []);
 
     const handleClear = () => {
         setMessages([]);
@@ -80,36 +93,22 @@ const MessageTable = ({ isExpandMessage, setIsExpandMessage }) => {
                     <MessageTableHead titles={titles} />
                     <MessageTableBody messages={messages}></MessageTableBody>
                 </Table>
-                <Button
-                    size="small"
-                    variant="contained"
-                    // className="text-[#ffffff00]"
-                    onClick={handleClear}
-                    sx={{
-                        position: 'absolute',
-                        top: 1,
-                        right: 1,
-                        zIndex: 10,
-                        height: 23.5,
-                        color: 'red',
-                        border: 1,
-                        borderColor: 'red',
-                        bgcolor: '#ffffff00',
-                        ":hover": {
-                            bgcolor: 'white'
-                        }
-                    }}
-                >Clear</Button>
             </TableContainer>
-            {/* <IconButton
+            {isExpandMessage && <Button
                 size="small"
-                variant='outlined'
-                onClick={() => setIsExpandMessage(prev => !prev)}
-                sx={{ height: 16, width: '100%', borderRadius: 0, bgcolor: "#f5f5f5" }}>
-                <KeyboardArrowDownIcon sx={{
-                    rotate: isExpandMessage ? '180deg' : '0deg'
-                }} />
-            </IconButton> */}
+                variant="outlined"
+                onClick={handleClear}
+                color="error"
+                sx={{
+                    position: 'absolute',
+                    top: 86,
+                    right: 10,
+                    zIndex: 10,
+                    height: 23.5,
+                    color: 'red',
+                    borderColor: 'red'
+                }}
+            >Clear</Button>}
         </Paper>
     )
 }
