@@ -2,19 +2,20 @@
 // Faisal Ahmed (M) - 13 Oct 2025
 
 import React, { useEffect, useState } from 'react';
-import Tooltip from '@mui/material/Tooltip';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
 import ClearIcon from '@mui/icons-material/Clear';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import StickyInstructions from '../../Components/StickyInstructions/StickyInstructions';
+import { headerKeys, headers } from './lib';
 import ProcessController from './ProcessController';
 import TimerSection from '../../Components/TimerSection';
 import MessageTable from '../../Components/MessageTable';
 import PulledDataFromEngine from './PulledDataFromEngine';
-import { headerKeys, headers } from './lib';
 import FormatDownload from '../../Components/FormatDownload';
 import SettingForModule from '../../Components/SettingForModule/SettingForModule';
+import StickyInstructions from '../../Components/StickyInstructions/StickyInstructions';
+import UploadedData from './UploadedData';
 
 const Issuance = ({
     isExpandStatusForExternal,
@@ -42,9 +43,22 @@ const Issuance = ({
     setPageToShow,
     setLibrary,
     chanel,
-    setChanel
+    setChanel,
+    pageOfUploaded,
+    setPageOfUploaded,
+    rowsPerPageOfUploaded,
+    setRowsPerPageOfUploaded,
+    totalRowsOfUploaded,
+    setTotalRowsOfUploaded,
+    tableBodyDataOfUploaded,
+    setTableBodyDataOfUploaded,
+    queryOfUploadedData,
+    setQueryOfUploadedData,
+    filterOpenOfUploadedData,
+    setFilterOpenOfUploadedData,
+    formDataOfUploadedData,
+    setFormDataOfUploadedData,
 }) => {
-
     const [isStartVisible, setIsStartVisible] = useState(false);
     const [engineError, setEngineError] = useState(false);
     // formData
@@ -328,7 +342,7 @@ const Issuance = ({
                     isExpandMessage={isExpandMessageForExternal}
                 />
             </div>
-            <PulledDataFromEngine
+            {/* <PulledDataFromEngine
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
                 isProcessing={isProcessing}
@@ -340,6 +354,27 @@ const Issuance = ({
                 setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
                 handleOpen={handleOpen}
                 handleStop={handleStop}
+            /> */}
+            <UploadedData
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                isProcessing={isProcessing}
+                pageOfUploaded={pageOfUploaded}
+                setPageOfUploaded={setPageOfUploaded}
+                rowsPerPageOfUploaded={rowsPerPageOfUploaded}
+                setRowsPerPageOfUploaded={setRowsPerPageOfUploaded}
+                totalRowsOfUploaded={totalRowsOfUploaded}
+                setTotalRowsOfUploaded={setTotalRowsOfUploaded}
+                tableBodyDataOfUploaded={tableBodyDataOfUploaded}
+                setTableBodyDataOfUploaded={setTableBodyDataOfUploaded}
+                queryOfUploadedData={queryOfUploadedData}
+                setQueryOfUploadedData={setQueryOfUploadedData}
+                handleOpen={handleOpen}
+                handleStop={handleStop}
+                filterOpenOfUploadedData={filterOpenOfUploadedData}
+                setFilterOpenOfUploadedData={setFilterOpenOfUploadedData}
+                formDataOfUploadedData={formDataOfUploadedData}
+                setFormDataOfUploadedData={setFormDataOfUploadedData}
             />
         </div>
     );

@@ -26,12 +26,10 @@ const PulledDataFromEngine = ({
     const [isDownloading, setIsDownloading] = useState(false);
 
     const onChangePage = (newPage) => {
-        // console.log("newPage", newPage);
         setPageOfPulledFromEngine(newPage);
     };
 
     const onChangeRowsPerPage = (row) => {
-        // console.log("row", row)
         setRowsPerPageOfPulledFromEngine(row);
         setPageOfPulledFromEngine(0);
     };

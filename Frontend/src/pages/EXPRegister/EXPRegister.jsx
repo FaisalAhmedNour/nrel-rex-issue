@@ -119,7 +119,7 @@ const EXPRegister = ({loading, setLoading}) => {
     };
     try {
       const result = await window?.engine?.Proxy("/exp/getexp?perPage=" + perPage + "&page=" + pageNo + "&from=" + searchParams.from + "&to=" + searchParams.to, 'post', data);
-      console.log("payload", data, "get register data result", result);
+      // console.log("payload", data, "get register data result", result);
       if (result?.status) {
         setStats(result?.data?.stats);
         setTotalRows(result?.data?.stats?.total);

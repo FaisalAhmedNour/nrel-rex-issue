@@ -54,14 +54,14 @@ const Root = () => {
     const [secondsForExternal, setSecondsForExternal] = useState(0);
     const [succeedForExternal, setSucceedForExternal] = useState(0);
 
-    // pulled data table
+    // Uploaded data table
     const [pageOfUploaded, setPageOfUploaded] = useState(0);
     const [rowsPerPageOfUploaded, setRowsPerPageOfUploaded] = useState(10);
     const [totalRowsOfUploaded, setTotalRowsOfUploaded] = useState(0);
     const [tableBodyDataOfUploaded, setTableBodyDataOfUploaded] = useState([]);
-    const [tableHeadersOfUploaded, setTableHeadersOfUploaded] = useState([]);
-    const [errorForUploadedPulledData, setErrorForUploadedPulledData] = useState(null);
-    const [queryOfUploadedPulledData, setQueryOfUploadedPulledData] = useState({ page: 0, setPage: 5 });
+    const [queryOfUploadedData, setQueryOfUploadedData] = useState({ page: 0, perPage: 10 });
+    const [filterOpenOfUploadedData, setFilterOpenOfUploadedData] = useState(false);
+    const [formDataOfUploadedData, setFormDataOfUploadedData] = useState({});
 
     // Engine start signal
     const getEngineOnSignal = () => {
@@ -204,6 +204,21 @@ const Root = () => {
                             setLibrary={setLibrary}
                             chanel={chanel}
                             setChanel={setChanel}
+
+                            pageOfUploaded={pageOfUploaded}
+                            setPageOfUploaded={setPageOfUploaded}
+                            rowsPerPageOfUploaded={rowsPerPageOfUploaded}
+                            setRowsPerPageOfUploaded={setRowsPerPageOfUploaded}
+                            totalRowsOfUploaded={totalRowsOfUploaded}
+                            setTotalRowsOfUploaded={setTotalRowsOfUploaded}
+                            tableBodyDataOfUploaded={tableBodyDataOfUploaded}
+                            setTableBodyDataOfUploaded={setTableBodyDataOfUploaded}
+                            queryOfUploadedData={queryOfUploadedData}
+                            setQueryOfUploadedData={setQueryOfUploadedData}
+                            filterOpenOfUploadedData={filterOpenOfUploadedData}
+                            setFilterOpenOfUploadedData={setFilterOpenOfUploadedData}
+                            formDataOfUploadedData={formDataOfUploadedData}
+                            setFormDataOfUploadedData={setFormDataOfUploadedData}
                         />
                     </div>
                     <div className={`${value !== 1 ? 'hidden' : ''}`}>

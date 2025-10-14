@@ -122,7 +122,7 @@ const Body = ({
                                                 // borderLeft: indx === 0 ? (isSelectOption ? 1 : 0) : 1,
                                                 // borderColor: 'black'
                                                 bgcolor: row?.isError ? 'red' : 'white',
-                                                borderBottom: '1px solid black'
+                                                // borderBottom: '1px solid black'
                                             }}
                                         >
                                             {head == 'SL No' ? row?.[head] < 10 ? `00${row?.[head]}` : row?.[head] < 100 ? `0${row?.[head]}` : row?.[head] : row?.[head]}
