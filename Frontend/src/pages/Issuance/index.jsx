@@ -348,8 +348,7 @@ const Issuance = ({
                     isExpandMessage={isExpandMessageForExternal}
                 />
             </div>
-            {
-                tableBodyDataOfPulledFromEngine &&
+            {tableBodyDataOfPulledFromEngine &&
                 tableBodyDataOfPulledFromEngine?.length > 0 &&
                 formState.action === "payslip" &&
                 <PulledDataFromEngine

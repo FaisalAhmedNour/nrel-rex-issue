@@ -109,7 +109,7 @@ export default function ExpRegisterTable({
   const [openDetails, setOpenDetails] = useState(false);
 
   const getReadyForExcel = (data) => {
-    const convertedData = data.map((order, i) => {
+    const convertedData = data?.map((order, i) => {
       const row = {};
       Object.keys(headers).forEach((headerKye, index) => {
         if (headerKye === 'Sl No') {
@@ -146,7 +146,7 @@ export default function ExpRegisterTable({
   }, [reloadTable]);
 
   useEffect(() => {
-    getReadyForExcel(files);
+    if (files?.length > 0) getReadyForExcel(files);
   }, [files]);
 
   useEffect(() => {
