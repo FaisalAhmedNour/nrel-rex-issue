@@ -197,55 +197,55 @@ const ProcessController = ({
                                     </Button>
                                 </div>
                             </div>}
-                        {(formState.action === "payslip") && (
-                            <div className="flex justify-between gap-1">
-                                <FormTitle text={"User Name"} isCompulsory={true} length={inputLength} />
-                                <div className="w-[400px] mx-auto relative">
-                                    <TextField
-                                        fullWidth
-                                        sx={{
-                                            flexGrow: 1,
-                                            "& .MuiInputBase-root": {
-                                                height: 25,
-                                                fontSize: 14,
-                                            },
-                                        }}
-                                        size="small"
-                                        name="userName"
-                                        variant="outlined"
-                                        id="outlined-basic"
-                                        className="editableInput"
-                                        value={formState.userName}
-                                        onChange={(e) => setFormState({ ...formState, userName: e.target.value })}
-                                    />
-                                </div>
+                        {/* {(formState.action === "payslip") && ( */}
+                        <div className="flex justify-between gap-1">
+                            <FormTitle text={"User Name"} isCompulsory={true} length={inputLength} />
+                            <div className="w-[400px] mx-auto relative">
+                                <TextField
+                                    fullWidth
+                                    sx={{
+                                        flexGrow: 1,
+                                        "& .MuiInputBase-root": {
+                                            height: 25,
+                                            fontSize: 14,
+                                        },
+                                    }}
+                                    size="small"
+                                    name="userName"
+                                    variant="outlined"
+                                    id="outlined-basic"
+                                    className="editableInput"
+                                    value={formState.userName}
+                                    onChange={(e) => setFormState({ ...formState, userName: e.target.value })}
+                                />
                             </div>
-                        )}
-                        {(formState.action === "payslip") && (
-                            <div className="flex justify-between gap-1">
-                                <FormTitle text={"Password"} isCompulsory={true} length={inputLength} />
-                                <div className="w-[400px] mx-auto relative">
-                                    <TextField
-                                        fullWidth
-                                        sx={{
-                                            flexGrow: 1,
-                                            "& .MuiInputBase-root": {
-                                                height: 25,
-                                                fontSize: 14,
-                                            },
-                                        }}
-                                        value={formState.password}
-                                        onChange={(e) => setFormState({ ...formState, password: e.target.value })}
-                                        type="password"
-                                        size="small"
-                                        name="password"
-                                        variant="outlined"
-                                        id="outlined-basic"
-                                        className="editableInput"
-                                    />
-                                </div>
+                        </div>
+                        {/* )} */}
+                        {/* {(formState.action === "payslip") && ( */}
+                        <div className="flex justify-between gap-1">
+                            <FormTitle text={"Password"} isCompulsory={true} length={inputLength} />
+                            <div className="w-[400px] mx-auto relative">
+                                <TextField
+                                    fullWidth
+                                    sx={{
+                                        flexGrow: 1,
+                                        "& .MuiInputBase-root": {
+                                            height: 25,
+                                            fontSize: 14,
+                                        },
+                                    }}
+                                    value={formState.password}
+                                    onChange={(e) => setFormState({ ...formState, password: e.target.value })}
+                                    type="password"
+                                    size="small"
+                                    name="password"
+                                    variant="outlined"
+                                    id="outlined-basic"
+                                    className="editableInput"
+                                />
                             </div>
-                        )}
+                        </div>
+                        {/* )} */}
                         {(formState.action === "payslip") && (
                             <div className="flex justify-start items-center gap-1">
                                 <FormTitle

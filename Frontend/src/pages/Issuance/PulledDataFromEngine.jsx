@@ -8,7 +8,7 @@ import Pagination from '../../Components/CustomTable/Pagination/Pagination';
 import Body from '../../Components/CustomTable/Body/Body';
 import exportToExcel from '../../Functions/exportToExcel';
 import Button from '@mui/material/Button';
-import { heightLightButton } from '../../lib';
+import DownloadOutlined from '@mui/icons-material/DownloadOutlined';
 
 const PulledDataFromEngine = ({
     isLoading,
@@ -50,34 +50,35 @@ const PulledDataFromEngine = ({
             headerTitle={"Response Data"}
             headerButtons={[
                 <>
-                    {isProcessing ?
+                    {isProcessing &&
                         <Button
                             size='small'
                             variant='contained'
                             onClick={handleStop}
                             color='error'
                             sx={{ height: 25 }}
-                        >Stop</Button> :
-                        <div className='flex justify-center items-center gap-1'>
-                            <Button
-                                size='small'
-                                variant='contained'
-                                color='success'
-                                sx={heightLightButton}
-                                onClick={() => handleOpen("verify")}
-                            >
-                                Start Verify
-                            </Button>
-                            <Button
-                                size='small'
-                                variant='contained'
-                                color='success'
-                                sx={heightLightButton}
-                                onClick={() => handleOpen("payslip")}
-                            >
-                                Start Issue
-                            </Button>
-                        </div>
+                        >Stop</Button> 
+                        // :
+                        // <div className='flex justify-center items-center gap-1'>
+                        //     <Button
+                        //         size='small'
+                        //         variant='contained'
+                        //         color='success'
+                        //         sx={heightLightButton}
+                        //         onClick={() => handleOpen("verify")}
+                        //     >
+                        //         Start Verify
+                        //     </Button>
+                        //     <Button
+                        //         size='small'
+                        //         variant='contained'
+                        //         color='success'
+                        //         sx={heightLightButton}
+                        //         onClick={() => handleOpen("payslip")}
+                        //     >
+                        //         Start Issue
+                        //     </Button>
+                        // </div>
                     }
                 </>
             ]}
@@ -90,29 +91,32 @@ const PulledDataFromEngine = ({
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 leftButtons={[
                     <>{
-                        tableBodyDataOfPulledFromEngine?.length > 0 &&
+                        // tableBodyDataOfPulledFromEngine?.length > 0 &&
                         <Button
                             size='small'
                             variant='outlined'
                             sx={{
-                                height: 22,
-                                textTransform: 'capitalize',
+                                height: 25,
+                                // textTransform: 'capitalize',
                             }}
+                            disabled={tableBodyDataOfPulledFromEngine?.length === 0}
                             onClick={handleDownload}
+                            startIcon={<DownloadOutlined />}
                         >
                             Download as Excel
                         </Button>
                     }</>,
                     <>{
-                        tableBodyDataOfPulledFromEngine?.length > 0 &&
+                        // tableBodyDataOfPulledFromEngine?.length > 0 &&
                         <Button
                             size='small'
                             variant='outlined'
                             color='error'
                             sx={{
-                                height: 22,
-                                textTransform: 'capitalize',
+                                height: 25,
+                                // textTransform: 'capitalize',
                             }}
+                            disabled={tableBodyDataOfPulledFromEngine?.length === 0}
                             onClick={() => setTableBodyDataOfPulledFromEngine([])}
                         >
                             Clear

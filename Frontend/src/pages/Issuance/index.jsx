@@ -113,7 +113,12 @@ const Issuance = ({
 
     const handleStart = async (e) => {
         e.preventDefault();
-        if (formState.action === "verify" && !formState.src) {
+        if (
+            formState.action === "verify" &&
+            (!formState.src ||
+                !formState.userName ||
+                !formState.password
+            )) {
             setEngineError("Please select the input file");
             return;
         }
@@ -134,11 +139,12 @@ const Issuance = ({
             src: formState.action === "verify" ? formState.src : undefined,
             dir: formState.action === "verify" ? formState.src : undefined,
             withPrefix: formState.action === "verify" ? undefined : formState.withPrefix,
-            userName: formState.action === "verify" ? undefined : formState.userName,
-            password: formState.action === "verify" ? undefined : formState.password,
+            userName: formState.userName,
+            password: formState.password,
             SoOSavePath: formState.action === "verify" ? undefined : formState.SoOSavePath,
             DOCpath: formState.action === "verify" ? undefined : formState.DOCpath,
         };
+        // return console.log('data', data)
         startEngine(data);
     }
 
@@ -342,19 +348,23 @@ const Issuance = ({
                     isExpandMessage={isExpandMessageForExternal}
                 />
             </div>
-            {/* <PulledDataFromEngine
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                isProcessing={isProcessing}
-                pageOfPulledFromEngine={pageOfPulledFromEngine}
-                setPageOfPulledFromEngine={setPageOfPulledFromEngine}
-                rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
-                setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
-                tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
-                setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
-                handleOpen={handleOpen}
-                handleStop={handleStop}
-            /> */}
+            {
+                tableBodyDataOfPulledFromEngine &&
+                tableBodyDataOfPulledFromEngine?.length > 0 &&
+                formState.action === "payslip" &&
+                <PulledDataFromEngine
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    isProcessing={isProcessing}
+                    pageOfPulledFromEngine={pageOfPulledFromEngine}
+                    setPageOfPulledFromEngine={setPageOfPulledFromEngine}
+                    rowsPerPageOfPulledFromEngine={rowsPerPageOfPulledFromEngine}
+                    setRowsPerPageOfPulledFromEngine={setRowsPerPageOfPulledFromEngine}
+                    tableBodyDataOfPulledFromEngine={tableBodyDataOfPulledFromEngine}
+                    setTableBodyDataOfPulledFromEngine={setTableBodyDataOfPulledFromEngine}
+                    handleOpen={handleOpen}
+                    handleStop={handleStop}
+                />}
             <UploadedData
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}

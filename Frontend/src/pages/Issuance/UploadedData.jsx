@@ -6,7 +6,6 @@ import CustomTable from '../../Components/CustomTable/CustomTable';
 import { fullHeaders, headerKeys, headers } from './lib';
 import Pagination from '../../Components/CustomTable/Pagination/Pagination';
 import Body from '../../Components/CustomTable/Body/Body';
-import exportToExcel from '../../Functions/exportToExcel';
 import Button from '@mui/material/Button';
 import { heightLightButton } from '../../lib';
 import Swal from 'sweetalert2';
